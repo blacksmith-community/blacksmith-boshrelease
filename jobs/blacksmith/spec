@@ -1,0 +1,16 @@
+---
+name: blacksmith
+packages:
+  - blacksmith
+templates:
+  bin/ctl: bin/ctl
+  bin/monit_debugger: bin/monit_debugger
+  config/blacksmith.conf.erb: config/blacksmith.conf
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+properties:
+  blacksmith.port:
+    description: "port to run blacksmith"
+    default: 8080

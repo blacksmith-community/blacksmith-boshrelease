@@ -1,0 +1,3 @@
+[submodule "src/blacksmith"]
+	path = src/blacksmith
+	url = https://github.com/cloudfoundry-community/blacksmith

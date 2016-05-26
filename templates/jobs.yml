@@ -9,9 +9,9 @@ update:
   serial: false
 
 jobs:
-  - name: just_install_packages
+  - name: blacksmith
     templates:
-    - name: just_install_packages
+    - name: blacksmith
       release: blacksmith
     instances: 1
     persistent_disk: 0

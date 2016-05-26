@@ -1,0 +1,6 @@
+---
+name: blacksmith
+dependencies:
+- golang
+files:
+- blacksmith/**/*
