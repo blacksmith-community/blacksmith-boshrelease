@@ -5,12 +5,38 @@ packages:
 templates:
   bin/ctl: bin/ctl
   bin/monit_debugger: bin/monit_debugger
-  config/blacksmith.conf.erb: config/blacksmith.conf
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
 properties:
-  blacksmith.port:
+  blacksmith.broker.port:
     description: "port to run blacksmith"
-    default: 8080
+    default: 3000
+  blacksmith.broker.username:
+    description: "username for blacksmith broker"
+    default: blacksmith
+  blacksmith.broker.password:
+    description: "password for blacksmith broker"
+    default: broker
+
+  blacksmith.vault.address:
+    description: "address for vault"
+  blacksmith.vault.token:
+    description: "token for vault"
+  blacksmith.vault.skip_ssl_validation:
+    description: "skip ssl validation for vault"
+    default: true
+
+  blacksmith.bosh.username:
+    description: "username for bosh"
+    default: admin
+  blacksmith.bosh.password:
+    description: "password for bosh"
+    default: admin
+  blacksmith.bosh.address:
+    description: "address for bosh director"
+    default: "https://192.168.50.4:25555"
+  blacksmith.bosh.skip_ssl_validation:
+    description: "skip ssl validation for bosh"
+    default: true

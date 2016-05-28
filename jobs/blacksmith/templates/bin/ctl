@@ -5,6 +5,7 @@ set -u # report the usage of uninitialized variables
 
 # Setup env vars and folders for the webapp_ctl script
 source /var/vcap/jobs/blacksmith/helpers/ctl_setup.sh 'blacksmith'
+source /var/vcap/jobs/blacksmith/data/properties.sh
 
 case $1 in
 
@@ -15,7 +16,7 @@ case $1 in
     # store pid in $PIDFILE
     echo "Starting $JOB_NAME..."
     echo $$ > $PIDFILE
-	exec chpst -u root:root blacksmith -c /var/vcap/jobs/blacksmith/config/blacksmith.conf \
+	exec chpst -u root:root blacksmith /var/vcap/jobs/*-forge/templates \
          >>$LOG_DIR/$JOB_NAME.log 2>&1
 
     ;;

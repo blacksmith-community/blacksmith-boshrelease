@@ -13,6 +13,8 @@ jobs:
     templates:
     - name: blacksmith
       release: blacksmith
+    - name: redis-forge
+      release: redis-forge
     instances: 1
     persistent_disk: 0
     resource_pool: small_z1
@@ -20,4 +22,8 @@ jobs:
 
 networks: (( param "please set networks" ))
 
-properties: {}
+properties:
+  blacksmith:
+    vault:
+      address: "http://10.244.8.3:8200"
+      token: "12999590-02e4-cc1f-4f76-6119f50aaa32"
