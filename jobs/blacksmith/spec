@@ -21,7 +21,7 @@ properties:
     default: blacksmith
   blacksmith.broker.password:
     description: "password for blacksmith broker"
-    default: broker
+    default: blacksmith
 
   blacksmith.vault.address:
     description: "address for vault"
