@@ -9,6 +9,7 @@ export JOB_INDEX=<%= index %>
 # full job name, like redis/0 or webapp/3
 export JOB_FULL="$NAME/$JOB_INDEX"
 
+<% if p('blacksmith.debug') %>export BLACKSMITH_DEBUG=yes<% end %>
 export AUTH_USERNAME="<%= properties.blacksmith.broker.username %>"
 export AUTH_PASSWORD="<%= properties.blacksmith.broker.password %>"
 export PORT="<%= properties.blacksmith.broker.port %>"

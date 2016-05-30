@@ -10,6 +10,9 @@ templates:
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
 properties:
+  blacksmith.debug:
+    description: "Enable verbose debugging routines in the Blacksmith broker, for diagnostics and troubleshooting.  Not recommended for production."
+    default: false
   blacksmith.broker.port:
     description: "port to run blacksmith"
     default: 3000
