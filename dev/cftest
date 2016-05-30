@@ -1,0 +1,39 @@
+#!/bin/bash
+
+fail=
+if [[ -z ${BROKER_IP} ]]; then
+  echo "\$BROKER_IP is required..."
+  fail=1
+fi
+
+BROKER_PORT=${BROKER_PORT:-3000}
+BROKER_USER=${BROKER_USER:-blacksmith}
+BROKER_PASS=${BROKER_PASS:-blacksmith}
+
+[[ -n ${fail} ]] && exit 1
+
+cf() {
+  local url=$1 ; shift
+  (set -x ; curl -v "http://${BROKER_IP}:${BROKER_PORT}${url}" --user "${BROKER_USER}:${BROKER_PASS}" "$@")
+}
+
+ORG=d4ec7333-c69f-41c4-96a7-bddcfaddbb05
+SPACE=d9a8c6c8-c5ac-4942-a508-3c2766ae3325
+
+WORK=$(mktemp -d blacksmith.test.XXXXXXXX)
+trap "rm -rf ${WORK}" INT QUIT TERM EXIT
+
+cf /v2/catalog | tee ${WORK}/catalog | jq .
+SERVICE=$(jq -r <${WORK}/catalog '.services[0].id')
+PLAN=$(jq -r <${WORK}/catalog '.services[0].plans[0].id')
+echo "SERVICE ${SERVICE}"
+echo "PLAN ${PLAN}"
+
+INSTANCE=a4d9a093-d01a-4ecc-8e9b-53a0a1c2159f
+cf /v2/service_instances/${INSTANCE}?accepts_incomplete=true -X PUT \
+  -H "X-Broker-API-Version: 2.8" -H "Content-Type: application/json" -d '{
+  "organization_guid" : "'${ORG}'",
+  "space_guid"        : "'${SPACE}'",
+  "service_id"        : "'${SERVICE}'",
+  "plan_id"           : "'${PLAN}'"
+}' | jq .
