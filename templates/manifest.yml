@@ -1,0 +1,43 @@
+name: blacksmith-warden
+
+director_uuid: 93c01d2d-a2a5-49d8-8d02-389fd223a9cf
+
+instance_groups:
+- name: blacksmith
+  instances: 1
+  azs: [z1]
+  networks:
+  - name: blacksmith
+  vm_type: default
+  stemcell: default
+  persistent_disk_type: default
+  jobs:
+  - name: blacksmith
+    release: blacksmith
+  - name: redis-forge
+    release: redis-forge
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: 3147
+
+update:
+  canaries: 1
+  max_in_flight: 10
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+
+
+properties:
+  blacksmith:
+    debug: true
+    vault:
+      address: http://10.244.8.3:8200
+      token: dcb9524d-3568-ad9d-d117-3bd879c0a9ef
+
+releases:
+- name: blacksmith
+  version: latest
+- name: redis-forge
+  version: latest

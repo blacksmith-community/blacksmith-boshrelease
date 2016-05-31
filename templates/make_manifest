@@ -58,8 +58,7 @@ fi
 STEMCELL=${STEMCELL:-$(latest_uploaded_stemcell)}
 
 templates=$(dirname $0)
-release=$templates/..
-tmpdir=$release/tmp
+tmpdir=tmp
 
 mkdir -p $tmpdir
 cp $templates/stub.yml $tmpdir/stub-with-uuid.yml
@@ -68,14 +67,19 @@ perl -pi -e "s/PLACEHOLDER-DIRECTOR-UUID/$DIRECTOR_UUID/g" $tmpdir/stub-with-uui
 perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml
 perl -pi -e "s/STEMCELL/$STEMCELL/g" $tmpdir/stub-with-uuid.yml
 
+
 if ! [ -x "$(command -v spruce)" ]; then
   echo 'spruce is not installed. Please download at https://github.com/geofffranks/spruce/releases' >&2
 fi
 
+#spruce merge \
+#  $tmpdir/cloud-config-current.yml \
+#  $templates/cloud-config-${infrastructure}.yml \
+#	> $tmpdir/cloud-config-current.yml
+
+
 spruce merge --prune meta \
-  $templates/deployment.yml \
-  $templates/jobs.yml \
-  $templates/infrastructure-${infrastructure}.yml \
+  $templates/manifest.yml \
   $tmpdir/stub-with-uuid.yml \
   $* > $tmpdir/$NAME-manifest.yml
 
