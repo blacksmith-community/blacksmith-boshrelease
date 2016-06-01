@@ -1,0 +1,43 @@
+name: (( grab $NAME ))
+
+director_uuid: (( grab $DIRECTOR_UUID ))
+
+instance_groups:
+- name: blacksmith
+  instances: 1
+  azs: [z1]
+  networks:
+  - name: blacksmith
+  vm_type: default
+  stemcell: default
+  persistent_disk_type: default
+  jobs:
+  - name: blacksmith
+    release: blacksmith
+  - name: redis-forge
+    release: redis-forge
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+update:
+  canaries: 1
+  max_in_flight: 10
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+
+
+properties:
+  blacksmith:
+    debug: true
+    vault:
+      address: http://10.244.8.2:8200
+      token: 907b347b-0622-0706-c4e3-0bca127cd128
+
+releases:
+- name: blacksmith
+  version: latest
+- name: redis-forge
+  version: latest
