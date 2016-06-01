@@ -1,6 +1,6 @@
-name: blacksmith-warden
+name: (( grab $NAME ))
 
-director_uuid: 93c01d2d-a2a5-49d8-8d02-389fd223a9cf
+director_uuid: (( grab $DIRECTOR_UUID ))
 
 instance_groups:
 - name: blacksmith
@@ -20,7 +20,7 @@ instance_groups:
 stemcells:
 - alias: default
   os: ubuntu-trusty
-  version: 3147
+  version: latest
 
 update:
   canaries: 1
@@ -33,8 +33,8 @@ properties:
   blacksmith:
     debug: true
     vault:
-      address: http://10.244.8.3:8200
-      token: dcb9524d-3568-ad9d-d117-3bd879c0a9ef
+      address: http://10.244.8.2:8200
+      token: 907b347b-0622-0706-c4e3-0bca127cd128
 
 releases:
 - name: blacksmith
