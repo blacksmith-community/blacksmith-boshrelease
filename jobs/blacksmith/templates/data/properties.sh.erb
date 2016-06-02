@@ -8,15 +8,3 @@ export NAME='<%= name %>'
 export JOB_INDEX=<%= index %>
 # full job name, like redis/0 or webapp/3
 export JOB_FULL="$NAME/$JOB_INDEX"
-
-<% if p('blacksmith.debug') %>export BLACKSMITH_DEBUG=yes<% end %>
-export AUTH_USERNAME="<%= properties.blacksmith.broker.username %>"
-export AUTH_PASSWORD="<%= properties.blacksmith.broker.password %>"
-export PORT="<%= properties.blacksmith.broker.port %>"
-export VAULT_ADDR="<%= properties.blacksmith.vault.address %>"
-export VAULT_TOKEN="<%= properties.blacksmith.vault.token %>"
-export VAULT_SKIP_VERIFY=<%= properties.blacksmith.vault.skip_ssl_validation %>
-export BOSH_ADDRESS="<%= properties.blacksmith.bosh.address %>"
-export BOSH_USERNAME="<%= properties.blacksmith.bosh.username %>"
-export BOSH_PASSWORD="<%= properties.blacksmith.bosh.password %>"
-export BOSH_SKIP_SSL=<%= properties.blacksmith.bosh.skip_ssl_validation %>

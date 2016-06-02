@@ -6,40 +6,41 @@ templates:
   bin/ctl: bin/ctl
   bin/monit_debugger: bin/monit_debugger
   data/properties.sh.erb: data/properties.sh
+  config/blacksmith.conf.erb: config/blacksmith.conf
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
 properties:
-  blacksmith.debug:
+  debug:
     description: "Enable verbose debugging routines in the Blacksmith broker, for diagnostics and troubleshooting.  Not recommended for production."
     default: false
-  blacksmith.broker.port:
+  broker.port:
     description: "port to run blacksmith"
     default: 3000
-  blacksmith.broker.username:
+  broker.username:
     description: "username for blacksmith broker"
     default: blacksmith
-  blacksmith.broker.password:
+  broker.password:
     description: "password for blacksmith broker"
     default: blacksmith
 
-  blacksmith.vault.address:
+  vault.address:
     description: "address for vault"
-  blacksmith.vault.token:
+  vault.token:
     description: "token for vault"
-  blacksmith.vault.skip_ssl_validation:
+  vault.skip_ssl_validation:
     description: "skip ssl validation for vault"
     default: true
 
-  blacksmith.bosh.username:
+  bosh.username:
     description: "username for bosh"
     default: admin
-  blacksmith.bosh.password:
+  bosh.password:
     description: "password for bosh"
     default: admin
-  blacksmith.bosh.address:
+  bosh.address:
     description: "address for bosh director"
     default: "https://192.168.50.4:25555"
-  blacksmith.bosh.skip_ssl_validation:
+  bosh.skip_ssl_validation:
     description: "skip ssl validation for bosh"
     default: true

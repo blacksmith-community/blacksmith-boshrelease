@@ -16,7 +16,9 @@ case $1 in
     # store pid in $PIDFILE
     echo "Starting $JOB_NAME..."
     echo $$ > $PIDFILE
-	exec chpst -u root:root blacksmith /var/vcap/jobs/*-forge/templates \
+	exec chpst -u root:root blacksmith \
+         -c /var/vcap/jobs/blacksmith/config/blacksmith.conf \
+         /var/vcap/jobs/*-forge/templates \
          >>$LOG_DIR/$JOB_NAME.log 2>&1
 
     ;;
