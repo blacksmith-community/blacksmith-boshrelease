@@ -33,9 +33,6 @@ cd ${REPO_ROOT}
 header "Pulling in any git submodules..."
 git submodule update --init --recursive --force
 
-export DIRECTOR_UUID=$(bosh status --uuid)
-export NAME=${BOSH_LITE_DEPLOYMENT}
-
 header "Cleaning up from any previous deployments..."
 bosh target ${BOSH_LITE_TARGET}
 bosh -n delete deployment ${BOSH_LITE_DEPLOYMENT} --force || echo "continuing on..."
