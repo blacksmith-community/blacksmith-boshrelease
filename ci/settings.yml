@@ -12,7 +12,7 @@ meta:
     private_key:  (( vault "secret/pipelines/blacksmith-boshrelease/github:private" ))
     access_token: (( vault "secret/pipelines/blacksmith-boshrelease/github:token" ))
   bosh-lite:
-    target: https://10.58.111.44:25555
+    target: https://10.58.111.49:25555
     deployment: blacksmith-warden
   slack:
     webhook: (( vault "secret/pipelines/blacksmith-boshrelease/slack:webhook" ))

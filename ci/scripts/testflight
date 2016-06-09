@@ -42,7 +42,7 @@ bosh -n create release
 bosh -n upload release --rebase || echo "Continuing..."
 
 header "Deploying to BOSH-lite..."
-./templates/make_manifest warden
+./templates/make_manifest
 bosh -n deploy
 
 header "Cleaning up..."
