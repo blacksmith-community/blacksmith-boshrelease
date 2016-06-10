@@ -1,6 +1,6 @@
 name: vault-warden
 
-director_uuid: 93c01d2d-a2a5-49d8-8d02-389fd223a9cf
+director_uuid: (( grab $DIRECTOR_UUID ))
 
 instance_groups:
 - name: vault
@@ -8,6 +8,7 @@ instance_groups:
   azs: [z1]
   networks:
   - name: default
+    static_ips: 10.244.123.34
   vm_type: default
   stemcell: default
   persistent_disk_type: default

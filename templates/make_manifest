@@ -6,6 +6,7 @@ template_prefix="blacksmith"
 
 export DIRECTOR_UUID=$(bosh status --uuid)
 export NAME=${template_prefix}-warden
+export VAULT_ADDR=http://10.244.123.34:8200
 
 tmpdir=$PWD/tmp
 mkdir -p $tmpdir
@@ -26,6 +27,15 @@ spruce merge \
 	> $tmpdir/cloud-config-final.yml
 
 bosh update cloud-config $tmpdir/cloud-config-final.yml
+
+spruce merge templates/vault.yml > $tmpdir/vault-manifest.yml
+
+bosh deployment $tmpdir/vault-manifest.yml
+bosh -n deploy
+
+arr=($(vault init -key-shares=1 -key-threshold=1 | awk '{print $NF}'))
+vault unseal ${arr[0]}
+export VAULT_TOKEN=${arr[1]}
 
 spruce merge templates/manifest.yml > $tmpdir/$NAME-manifest.yml
 
