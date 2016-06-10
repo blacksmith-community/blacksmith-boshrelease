@@ -17,7 +17,7 @@ instance_groups:
     properties:
       debug: true
       vault:
-        address: http://10.244.8.2:8200
+        address: http://10.244.123.2:8200
         token: 907b347b-0622-0706-c4e3-0bca127cd128
   - name: redis-forge
     release: redis-forge
