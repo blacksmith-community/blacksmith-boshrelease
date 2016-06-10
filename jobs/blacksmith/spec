@@ -2,6 +2,7 @@
 name: blacksmith
 packages:
   - blacksmith
+  - safe
 templates:
   bin/ctl: bin/ctl
   bin/monit_debugger: bin/monit_debugger
