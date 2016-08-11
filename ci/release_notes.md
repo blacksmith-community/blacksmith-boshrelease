@@ -19,3 +19,6 @@ Bumped safe to v0.0.20
 
 ##### safe
 Bumped safe to v0.0.21
+
+##### safe
+Bumped safe to v0.0.22
