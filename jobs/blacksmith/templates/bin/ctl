@@ -1,7 +1,5 @@
 #!/bin/bash
-
-set -e # exit immediately if a simple command exits with a non-zero status
-set -u # report the usage of uninitialized variables
+set -eu
 
 # Setup env vars and folders for the webapp_ctl script
 source /var/vcap/jobs/blacksmith/helpers/ctl_setup.sh 'blacksmith'
@@ -16,9 +14,12 @@ case $1 in
     # store pid in $PIDFILE
     echo "Starting $JOB_NAME..."
     echo $$ > $PIDFILE
-	  exec chpst -u root:root blacksmith \
+
+    shopt -s nullglob
+    exec chpst -u root:root blacksmith \
          -c /var/vcap/jobs/blacksmith/config/blacksmith.conf \
          /var/vcap/jobs/*-forge/templates \
+         /var/vcap/data/blacksmith/*-forge \
          >>$LOG_DIR/$JOB_NAME.log 2>&1
 
     ;;
