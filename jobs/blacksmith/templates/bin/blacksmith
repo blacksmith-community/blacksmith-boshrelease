@@ -1,0 +1,58 @@
+#!/bin/bash
+set -eu
+
+source /var/vcap/jobs/blacksmith/helpers/ctl_setup.sh blacksmith
+source /var/vcap/jobs/blacksmith/data/properties.sh
+exec >>$LOG_DIR/blacksmith.log 2>&1
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE blacksmith
+
+    # find all the `configure-blacksmith` scripts and run them
+    shopt -s nullglob
+    for setup in /var/vcap/jobs/*/bin/configure-blacksmith; do
+      echo "Executing Blacksmith setup script $setup..."
+      $setup
+    done
+
+    # don't start the broker up until the Vault is running
+    n=21
+    echo "Waiting up to 20s for the local Vault to become available..."
+    while [[ $n -ne 0 ]]; do
+      if curl -Ls http://127.0.0.1:8200/v1/sys/init >/dev/null; then
+        break
+      fi
+
+      n=$(( n - 1 ))
+      sleep 1
+    done
+    echo "Checking availability of the local Vault"
+    curl -Ls http://127.0.0.1:8200/v1/sys/init >/dev/null
+    echo "Vault Ready."
+
+    # for storage of seal key / root token
+    mkdir -p /var/vcap/store/blacksmith/.vault
+
+    shopt -s nullglob
+    echo $$ > $PIDFILE
+    echo "Starting up Blacksmith Broker process"
+    exec chpst -u root:root blacksmith \
+         -c /var/vcap/jobs/blacksmith/config/blacksmith.conf \
+         /var/vcap/jobs/*-forge/templates \
+         /var/vcap/data/blacksmith/*-forge \
+         >>$LOG_DIR/blacksmith.log 2>&1
+
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+    ;;
+
+  *)
+    echo "Usage: blacksmith {start|stop}"
+    ;;
+
+esac
+exit 0

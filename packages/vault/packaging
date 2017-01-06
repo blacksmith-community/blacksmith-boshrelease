@@ -1,0 +1,15 @@
+#!/bin/bash
+set -eu
+
+# $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
+# $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
+
+# from https://releases.hashicorp.com/vault/0.6.4/vault_0.6.4_linux_amd64.zip
+
+mkdir ${BOSH_INSTALL_TARGET}/bin
+
+cd vault
+unzip vault_0.6.4_linux_amd64.zip
+cp vault ${BOSH_INSTALL_TARGET}/bin
+
+chmod 0755 ${BOSH_INSTALL_TARGET}/bin/*

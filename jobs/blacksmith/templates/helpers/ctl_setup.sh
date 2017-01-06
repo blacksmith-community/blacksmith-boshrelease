@@ -56,12 +56,3 @@ done
 export TMPDIR=$TMP_DIR
 
 PIDFILE=$RUN_DIR/$output_label.pid
-
-# Setup safe auth
-cat <<EOF > $HOME/.saferc
-Aliases:
-  myvault: <%= properties.vault.address %>
-Current: myvault
-Targets:
-  <%= properties.vault.address %>: <%= properties.vault.token %>
-EOF

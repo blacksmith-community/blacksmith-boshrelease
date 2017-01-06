@@ -3,13 +3,19 @@ name: blacksmith
 packages:
   - blacksmith
   - safe
+  - vault
+
 templates:
-  bin/ctl: bin/ctl
+  bin/blacksmith: bin/blacksmith
+  bin/vault:      bin/vault
+
   bin/monit_debugger: bin/monit_debugger
   data/properties.sh.erb: data/properties.sh
-  config/blacksmith.conf.erb: config/blacksmith.conf
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+  config/blacksmith.conf: config/blacksmith.conf
+  config/vault.conf: config/vault.conf
 
 properties:
   debug:
@@ -24,14 +30,6 @@ properties:
   broker.password:
     description: "password for blacksmith broker"
     default: blacksmith
-
-  vault.address:
-    description: "address for vault"
-  vault.token:
-    description: "token for vault"
-  vault.skip_ssl_validation:
-    description: "skip ssl validation for vault"
-    default: true
 
   bosh.username:
     description: "username for bosh"

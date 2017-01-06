@@ -1,5 +1,11 @@
+check process vault
+  with pidfile /var/vcap/sys/run/blacksmith/vault.pid
+  start program "/var/vcap/jobs/blacksmith/bin/monit_debugger vault_ctl '/var/vcap/jobs/blacksmith/bin/vault start'"
+  stop  program "/var/vcap/jobs/blacksmith/bin/monit_debugger vault_ctl '/var/vcap/jobs/blacksmith/bin/vault stop'"
+  group vcap
+
 check process blacksmith
   with pidfile /var/vcap/sys/run/blacksmith/blacksmith.pid
-  start program "/var/vcap/jobs/blacksmith/bin/monit_debugger blacksmith_ctl '/var/vcap/jobs/blacksmith/bin/ctl start'"
-  stop program "/var/vcap/jobs/blacksmith/bin/monit_debugger blacksmith_ctl '/var/vcap/jobs/blacksmith/bin/ctl stop'"
+  start program "/var/vcap/jobs/blacksmith/bin/monit_debugger blacksmith_ctl '/var/vcap/jobs/blacksmith/bin/blacksmith start'"
+  stop  program "/var/vcap/jobs/blacksmith/bin/monit_debugger blacksmith_ctl '/var/vcap/jobs/blacksmith/bin/blacksmith stop'"
   group vcap
