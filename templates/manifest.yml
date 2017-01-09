@@ -16,9 +16,6 @@ instance_groups:
     release: blacksmith
     properties:
       debug: true
-      vault:
-        address: (( grab $VAULT_ADDR ))
-        token: (( grab $VAULT_TOKEN ))
   - name: redis-forge
     release: redis-forge
 

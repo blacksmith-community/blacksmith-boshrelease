@@ -1,12 +1,10 @@
 #!/bin/bash
-
 set -e
 
 template_prefix="blacksmith"
 
 export DIRECTOR_UUID=$(bosh status --uuid)
 export NAME=${template_prefix}-warden
-export VAULT_ADDR=http://10.244.123.34:8200
 
 tmpdir=$PWD/tmp
 mkdir -p $tmpdir
@@ -14,7 +12,7 @@ mkdir -p $tmpdir
 bosh cloud-config 1>$tmpdir/cloud-config-current.yml 2>/dev/null
 
 if ! [ -s $tmpdir/cloud-config-current.yml ]; then
-	echo "--- {}" >> $tmpdir/cloud-config-current.yml
+  echo "--- {}" >> $tmpdir/cloud-config-current.yml
 fi
 
 if ! [ -x "$(command -v spruce)" ]; then
@@ -24,20 +22,9 @@ fi
 spruce merge \
   $tmpdir/cloud-config-current.yml \
   templates/cloud-config-warden.yml \
-	> $tmpdir/cloud-config-final.yml
+   > $tmpdir/cloud-config-final.yml
 
 bosh update cloud-config $tmpdir/cloud-config-final.yml
-
-spruce merge templates/vault.yml > $tmpdir/vault-manifest.yml
-
-bosh deployment $tmpdir/vault-manifest.yml
-bosh -n deploy
-
-arr=($(vault init -key-shares=1 -key-threshold=1 | awk '{print $NF}'))
-vault unseal ${arr[0]}
-export VAULT_TOKEN=${arr[1]}
-
 spruce merge templates/manifest.yml > $tmpdir/$NAME-manifest.yml
-
 bosh deployment $tmpdir/$NAME-manifest.yml
 bosh status
