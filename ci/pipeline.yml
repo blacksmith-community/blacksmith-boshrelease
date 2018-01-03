@@ -62,7 +62,10 @@ jobs:
       - task: testflight
         config:
           platform: linux
-          image: docker:///starkandwayne/concourse
+          image_resource:
+            type: docker-image
+            source:
+              repository: starkandwayne/concourse
           inputs:
             - { name: git }
           run:
@@ -83,6 +86,20 @@ jobs:
           - { get: version, trigger: false, params: {pre: rc} }
       - put: version
         params: {file: version/number}
+        on_success:
+          put: notify
+          params:
+            channel:  (( grab meta.slack.channel ))
+            username: (( grab meta.slack.username ))
+            icon_url: (( grab meta.slack.icon ))
+            text:     (( grab meta.slack.blob_success ))
+        on_failure:
+          put: notify
+          params:
+            channel:  (( grab meta.slack.channel ))
+            username: (( grab meta.slack.username ))
+            icon_url: (( grab meta.slack.icon ))
+            text:     (( grab meta.slack.blob_failure ))
 
   - name: minor
     public: true
@@ -105,7 +122,10 @@ jobs:
           - { get: git,     passed: [rc] }
       - task: release
         config:
-          image: docker:///starkandwayne/concourse
+          image_resource:
+            type: docker-image
+            source:
+              repository: starkandwayne/concourse
           platform: linux
           inputs:
             - name: version
