@@ -1,3 +1,0 @@
-[submodule "src/github.com/cloudfoundry-community/blacksmith"]
-	path = src/blacksmith/src/github.com/cloudfoundry-community/blacksmith
-	url = https://github.com/cloudfoundry-community/blacksmith
