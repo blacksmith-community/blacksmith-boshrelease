@@ -36,8 +36,8 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: (( grab meta.image.name ))
-          tag:        (( grab meta.image.tag ))
+          repository: starkandwayne
+          tag:        concourse
       inputs:
       - name: git
       - name: blacksmith
@@ -52,7 +52,7 @@ jobs:
         BLOB_NAME:   blacksmith
         BLOB_BINARY: blacksmith-linux-amd64
         BLOB_URL:    https://github.com/cloudfoundry-community/blacksmith
-        BLOB_DESTINATION: blacksmith/blacksmith-linux-amd64-${VERSION}.tar.gz
+        BLOB_DESTINATION: blacksmith/blacksmith-linux-amd64-${VERSION}
         BLOB_CLEANUP:     blacksmith/blacksmith.*
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
@@ -83,6 +83,12 @@ jobs:
         icon_url: (( grab meta.slack.icon ))
         text:     (( grab meta.slack.blob_failure ))
 
+
+groups:
+  - name: (( grab meta.pipeline ))
+    jobs:
+      - (( append ))
+      - blacksmith
 
 resources:
 - name: blacksmith
