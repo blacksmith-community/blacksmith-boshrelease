@@ -2,18 +2,33 @@
 meta:
   name: blacksmith
   url: https://ci.starkandwayne.com/
-  target: blacksmith
+  target: sw
+
+  manifest:
+    path: ci/manifest.yml
+
   aws:
     access_key: (( vault "secret/aws/cfcommunity:access" ))
     secret_key: (( vault "secret/aws/cfcommunity:secret" ))
+
+  git:
+    email: ci@starkandwayne.com
+    name:  Stark & Wayne CI Bot
+
   github:
     owner: cloudfoundry-community
     repo:  blacksmith-boshrelease
     private_key:  (( vault "secret/pipelines/blacksmith-boshrelease/github:private" ))
     access_token: (( vault "secret/pipelines/blacksmith-boshrelease/github:token" ))
+    branch: ci
+
   bosh-lite:
-    target: https://10.58.111.44:25555
-    deployment: blacksmith-warden
+    target: https://10.58.111.49:25555
+    username: (( vault "secret/bosh-lites/lite49/users/admin:username" ))
+    password: (( vault "secret/bosh-lites/lite49/users/admin:password" ))
+    cacert:   (( vault "secret/bosh-lites/lite49/certs:rootCA.pem" ))
+
+
   slack:
     webhook: (( vault "secret/pipelines/blacksmith-boshrelease/slack:webhook" ))
     channel: "#botspam"
@@ -36,8 +51,8 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: starkandwayne
-          tag:        concourse
+          repository: (( grab meta.image.name ))
+          tag:        (( grab meta.image.tag ))
       inputs:
       - name: git
       - name: blacksmith
@@ -85,10 +100,9 @@ jobs:
 
 
 groups:
-  - name: (( grab meta.pipeline ))
-    jobs:
-      - (( append ))
-      - blacksmith
+- name: blobs
+  jobs:
+    - blacksmith
 
 resources:
 - name: blacksmith

@@ -1,0 +1,40 @@
+name: blacksmith-ci
+
+instance_groups:
+- name: blacksmith
+  instances: 1
+  azs:       [z1]
+  vm_type:   default
+  stemcell:  default
+  networks:
+    - name: default
+  jobs:
+    - name: blacksmith
+      release: blacksmith
+    - name: example-blacksmith-plans
+      release: blacksmith
+      properties:
+        plans:
+          standalone:
+            #name: Standalone Instance
+            name: standalone
+            description: A single example server, with no redundancy or replication
+            limit: 7
+            type: standalone
+            vm_type: default
+
+update:
+  canaries: 0
+  max_in_flight: 1
+  serial: true
+  canary_watch_time: 1000-120000
+  update_watch_time: 1000-120000
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+releases:
+- name: blacksmith
+  version: latest

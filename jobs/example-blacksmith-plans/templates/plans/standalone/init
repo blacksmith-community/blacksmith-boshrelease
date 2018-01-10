@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+
+safe gen $CREDENTIALS/example/system password
+
+exit 0
