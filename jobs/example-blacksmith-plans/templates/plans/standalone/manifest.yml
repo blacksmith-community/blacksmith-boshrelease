@@ -1,0 +1,41 @@
+---
+# NOTE: this plan is NOT EXPECTED TO DEPLOY PROPERLY
+#       For starters, there is no "example-forge" BOSH
+#       release.  It exists primarily for CI to run a
+#       viability test against canidate BOSH releases.
+
+meta:
+  size: default
+  password: (( vault $CREDENTIALS "/example/system:password" ))
+
+releases:
+  - { name: example-forge, version: latest }
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+update:
+  canaries: 1
+  max_in_flight: 10
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+
+instance_groups:
+  - name: standalone
+    instances: 1
+    azs: [z1]
+    networks:
+      - name: example-service
+    stemcell: default
+
+    vm_type: (( grab meta.size ))
+    persistent_disk_type: default
+
+    jobs:
+      - name:    standalone
+        release: example-forge
+        properties:
+          auth:
+            password: (( grab meta.password ))

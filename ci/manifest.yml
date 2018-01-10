@@ -11,6 +11,17 @@ instance_groups:
   jobs:
     - name: blacksmith
       release: blacksmith
+    - name: example-blacksmith-plans
+      release: blacksmith
+      properties:
+        plans:
+          standalone:
+            #name: Standalone Instance
+            name: standalone
+            description: A single example server, with no redundancy or replication
+            limit: 7
+            type: standalone
+            vm_type: default
 
 update:
   canaries: 0
