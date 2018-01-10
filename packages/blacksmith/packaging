@@ -1,5 +1,6 @@
 #!/bin/bash
 set -ex
 
+mkdir -p ${BOSH_INSTALL_TARGET}/bin
 cp blacksmith/blacksmith-linux-amd64* ${BOSH_INSTALL_TARGET}/bin/blacksmith
 chmod +x ${BOSH_INSTALL_TARGET}/bin/blacksmith
