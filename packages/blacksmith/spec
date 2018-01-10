@@ -1,6 +1,4 @@
 ---
 name: blacksmith
-dependencies:
-- golang
 files:
-- blacksmith/**/*
+- blacksmith/blacksmith-linux-*

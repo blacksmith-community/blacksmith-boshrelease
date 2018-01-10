@@ -2,10 +2,6 @@ blacksmith/blacksmith-linux-amd64-0.0.1:
   size: 8239994
   object_id: 0ab72414-de15-4e07-64ea-83e8fdab4cba
   sha: 58ec4331a790d577461f078fb33468c9db4d08e4
-golang_1.6/go1.6.2.linux-amd64.tar.gz:
-  size: 84840658
-  object_id: a3b86c5d-5148-4061-8ad9-7c59673ee222
-  sha: b8318b09de06076d5397e6ec18ebef3b45cd315d
 safe/safe:
   size: 7435151
   object_id: 49b68faa-6a68-48e8-8603-cae53e44052c
