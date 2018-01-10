@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "UPDATING BLOBS"
+echo ; echo
+
 set -e
 
 : ${BLOB_DIR:?required}
