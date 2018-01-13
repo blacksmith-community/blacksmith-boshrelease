@@ -47,3 +47,6 @@ properties:
     default: true
   bosh.cloud-config:
     description: "A complete cloud-config for your Blacksmith network"
+  bosh.stemcells:
+    description: "A list of stemcells to upload.  Each item in the list should have a `name`, `version`, `url` and `sha1` parameter."
+    default: []
