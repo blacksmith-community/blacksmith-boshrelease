@@ -20,7 +20,6 @@ meta:
     repo:  blacksmith-boshrelease
     private_key:  (( vault "secret/pipelines/blacksmith-boshrelease/github:private" ))
     access_token: (( vault "secret/pipelines/blacksmith-boshrelease/github:token" ))
-    branch: ci
 
   bosh-lite:
     target: https://10.58.111.49:25555
