@@ -1,0 +1,3 @@
+<% if p('bosh.cloud-config', '') == ''
+     raise "You must specify the bosh.cloud-config property..."
+   end %><%= p('bosh.cloud-config', {}).to_yaml %>

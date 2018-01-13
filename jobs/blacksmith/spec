@@ -14,7 +14,9 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
-  config/blacksmith.conf: config/blacksmith.conf
+  config/blacksmith.conf:  config/blacksmith.conf
+  config/cloud-config.yml: config/cloud-config.yml
+
   config/vault.conf: config/vault.conf
 
 properties:
@@ -43,3 +45,5 @@ properties:
   bosh.skip_ssl_validation:
     description: "skip ssl validation for bosh"
     default: true
+  bosh.cloud-config:
+    description: "A complete cloud-config for your Blacksmith network"
