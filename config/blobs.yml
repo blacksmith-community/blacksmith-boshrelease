@@ -1,7 +1,7 @@
-blacksmith/blacksmith-linux-amd64-0.0.2:
-  size: 8404984
-  object_id: 56e09bcd-1125-4ad6-7a58-ab0d2b2ba27a
-  sha: 36470c56628e4158d8dd9aea15fac62e63eb1c2e
+blacksmith/blacksmith-linux-amd64-0.0.3:
+  size: 8417690
+  object_id: ed726cae-7836-4053-4d19-a3d3797f3f5b
+  sha: 457b540bc55c8c5ef3f47be0513491ce9f606dff
 safe/safe:
   size: 7435151
   object_id: 49b68faa-6a68-48e8-8603-cae53e44052c
