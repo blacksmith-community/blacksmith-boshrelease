@@ -28,7 +28,8 @@ fi
 
 # expand ${VERSION} env var into file path
 eval "blob_destination=${BLOB_DESTINATION}"
-bosh2 add-blob ../${BLOB_DIR}/${BLOB_BINARY} "${blob_destination}"
+eval "blob_binary=${BLOB_BINARY}"
+bosh2 add-blob ../${BLOB_DIR}/${blob_binary} "${blob_destination}"
 bosh2 -n upload-blobs
 rm config/private.yml
 popd
