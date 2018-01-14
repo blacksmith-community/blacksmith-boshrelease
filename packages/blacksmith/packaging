@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ex
 
+tar -xjf blacksmith/blacksmith-*.tar.bz2
+
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
-cp blacksmith/blacksmith-linux-amd64* ${BOSH_INSTALL_TARGET}/bin/blacksmith
+cp blacksmith-*/blacksmith-linux-amd64* ${BOSH_INSTALL_TARGET}/bin/blacksmith
 chmod +x ${BOSH_INSTALL_TARGET}/bin/blacksmith
+cp -a blacksmith-*/ui ${BOSH_INSTALL_TARGET}/ui

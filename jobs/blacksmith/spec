@@ -23,6 +23,10 @@ properties:
   debug:
     description: "Enable verbose debugging routines in the Blacksmith broker, for diagnostics and troubleshooting.  Not recommended for production."
     default: false
+  env:
+    description: "Environment tag, for the Blacksmith Management UI"
+    default: ""
+
   broker.port:
     description: "port to run blacksmith"
     default: 3000
