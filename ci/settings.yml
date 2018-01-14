@@ -43,7 +43,7 @@ jobs:
     - get: blacksmith
       trigger: true
       params:
-        globs: [blacksmith-linux-amd64]
+        globs: [blacksmith-*.tar.bz2]
   - task: update-blacksmith
     config:
       platform: linux
@@ -63,7 +63,7 @@ jobs:
         REPO_ROOT:   git
         REPO_OUT:    pushme
         BLOB_DIR:    blacksmith
-        BLOB_NAME:   blacksmith
+        BLOB_NAME:   Blacksmith
         BLOB_BINARY: blacksmith-${VERSION}.tar.bz2
         BLOB_URL:    https://github.com/cloudfoundry-community/blacksmith
         BLOB_DESTINATION: blacksmith/blacksmith-${VERSION}.tar.bz2
