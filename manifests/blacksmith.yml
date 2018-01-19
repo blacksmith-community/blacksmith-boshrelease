@@ -1,0 +1,51 @@
+---
+name: blacksmith
+
+instance_groups:
+  - name: blacksmith
+    instances: 1
+    stemcell:  default
+    azs:       [z1]
+    vm_type:   default
+    persistent_disk: 2_048
+    networks:
+      - name:       default
+        static_ips: [((blacksmith_ip))]
+    jobs:
+      - release: blacksmith
+        name:    blacksmith
+        properties:
+          debug: false
+          env:   ((blacksmith_ip))
+
+          broker:
+            username: blacksmith
+            password: ((broker_password))
+
+          bosh:
+            username: ((bosh_username))
+            password: ((bosh_password))
+            address:  https://((bosh_ip)):25555
+
+variables:
+  - name: broker_password
+    type: password
+
+update:
+  serial: false
+  canaries: 1
+  canary_watch_time: 30000-600000
+  update_watch_time: 5000-600000
+  max_in_flight: 1
+  max_errors: 1
+
+stemcells:
+  - alias:   default
+    os:      ubuntu-trusty
+    version: latest
+
+releases:
+  - name:    blacksmith
+    version: 0.0.4
+    url:     https://github.com/cloudfoundry-community/blacksmith-boshrelease/releases/download/v0.0.4/blacksmith-0.0.4.tgz
+    sha1:    d45bb4b812f86482723eaede8969f15cea41f4db
