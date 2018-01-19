@@ -54,3 +54,6 @@ properties:
   bosh.stemcells:
     description: "A list of stemcells to upload.  Each item in the list should have a `name`, `version`, `url` and `sha1` parameter."
     default: []
+  bosh.releases:
+    description: "A list of releases to upload.  Each item in the list should have a `name`, `version`, `url` and `sha1` parameter."
+    default: []
