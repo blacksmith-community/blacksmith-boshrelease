@@ -1,9 +1,4 @@
+# Software Updates
 
-# Safe
-Bumped https://github.com/starkandwayne/safe to v0.6.4
-
-# Safe
-Bumped https://github.com/starkandwayne/safe to v0.7.0
-
-# Blacksmith
-Bumped https://github.com/cloudfoundry-community/blacksmith to v0.0.9
+- **safe** upgraded to 0.7.0.
+- **blacksmith** upgraded to 0.0.9.
