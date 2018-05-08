@@ -46,6 +46,6 @@ stemcells:
 
 releases:
 - name: blacksmith
-  version: 0.0.5
-  url: https://github.com/cloudfoundry-community/blacksmith-boshrelease/releases/download/v0.0.5/blacksmith-0.0.5.tgz
-  sha1: 728ed1c13c5202ff488d410b2f5936b8ea936b57
+  version: 0.0.6
+  url: https://github.com/cloudfoundry-community/blacksmith-boshrelease/releases/download/v0.0.6/blacksmith-0.0.6.tgz
+  sha1: 4ed2e095c216ea5baf671e61cc0e1cc617d7099b
