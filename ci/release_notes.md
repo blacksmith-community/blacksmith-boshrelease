@@ -7,3 +7,6 @@
 
 # Safe
 Bumped https://github.com/starkandwayne/safe to v0.8.0
+
+# Safe
+Bumped https://github.com/starkandwayne/safe to v0.8.1
