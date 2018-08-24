@@ -3,9 +3,9 @@ blacksmith/blacksmith-0.0.9.tar.bz2:
   object_id: cfe09521-eaff-42c5-5878-fafd874f04e2
   sha: 7723c04a2ee4effb91adb1e7e0e73ac48c0bd6d5
 safe/safe:
-  size: 7956984
-  object_id: 24887059-2a15-4333-606b-13637aba0355
-  sha: 09d2f987ea77ada3be81a9d58876c04a86355beb
+  size: 7957165
+  object_id: ea99d408-4db7-41b2-7caf-2f9723e6e6e6
+  sha: efa2512f81c48f3281a87620dacd207453f7daf5
 vault/vault_0.6.4_linux_amd64.zip:
   size: 12221196
   object_id: c84aefe6-ace4-4b75-897a-05af5f197f29
