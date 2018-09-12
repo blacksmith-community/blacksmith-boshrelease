@@ -28,3 +28,6 @@ Bumped https://github.com/starkandwayne/safe to v0.9.4
 
 # Safe
 Bumped https://github.com/starkandwayne/safe to v0.9.5
+
+# Safe
+Bumped https://github.com/starkandwayne/safe to v0.9.6
