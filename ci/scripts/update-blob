@@ -57,8 +57,8 @@ cat >config/private.yml <<EOF
 blobstore:
   provider: s3
   options:
-    access_key_id: ${AWS_ACCESS_KEY:?required}
-    secret_access_key: ${AWS_SECRET_KEY:?required}
+    access_key_id: ${AWS_ACCESS_KEY}
+    secret_access_key: ${AWS_SECRET_KEY}
 EOF
 
 ######
@@ -84,9 +84,11 @@ if [[ ${BLOB_SOURCE:-} =~ ^http ]]; then
 fi
 
 # remove things that github-release puts in the directory that we don't want.
-rm -f ../${RELEASE_DIR}/tag \
-      ../${RELEASE_DIR}/body \
-      ../${RELEASE_DIR}/version
+rm -f ../${BLOB_DIR}/tag \
+      ../${BLOB_DIR}/body \
+      ../${BLOB_DIR}/version
+
+ls -lah ../${BLOB_DIR}
 
 ######
 ######
