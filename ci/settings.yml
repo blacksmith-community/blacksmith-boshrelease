@@ -1,38 +1,39 @@
 ---
 meta:
-  name: blacksmith
-  url: https://ci.starkandwayne.com/
-  target: sw
+  name:    blacksmith
+  release: Blacksmith
+  target:  blacksmith@pipes
+  url:     https://pipes.starkandwayne.com
 
   manifest:
     path: ci/manifest.yml
 
+  bosh-lite:
+    target:   https://10.200.131.9:25555
+    username: admin
+    password: (( vault "secret/thunder/dome/bosh/users/admin:password" ))
+    cacert:   (( vault "secret/thunder/dome/bosh/ssl/ca:certificate" ))
+
   aws:
-    access_key: (( vault "secret/aws/cfcommunity:access" ))
-    secret_key: (( vault "secret/aws/cfcommunity:secret" ))
+    access_key: (( vault "secret/pipelines/aws/cf-community:access" ))
+    secret_key: (( vault "secret/pipelines/aws/cf-community:secret" ))
 
   git:
-    email: ci@starkandwayne.com
     name:  Stark & Wayne CI Bot
+    email: ci@starkandwayne.com
 
   github:
-    owner: cloudfoundry-community
-    repo:  blacksmith-boshrelease
-    private_key:  (( vault "secret/pipelines/blacksmith-boshrelease/github:private" ))
-    access_token: (( vault "secret/pipelines/blacksmith-boshrelease/github:token" ))
+    owner:  blacksmith-community
+    repo:   blacksmith-boshrelease
+    branch: master
+    private_key:  (( vault "secret/pipelines/github/starkandwayne/ci-bot:private" ))
+    access_token: (( vault "secret/pipelines/github/starkandwayne/ci-bot:access_token" ))
 
-  bosh-lite:
-    target: https://10.58.111.44:25555
-    username: (( vault "secret/bosh-lites/lite44/users/admin:username" ))
-    password: (( vault "secret/bosh-lites/lite44/users/admin:password" ))
-    cacert:   (( vault "secret/bosh-lites/lite44/certs:rootCA.pem" ))
+  shout:
+    url:      http://10.200.131.1:7109
+    username: ops
+    password: (( vault "secret/buffalo/lab/concourse/shout/ops:password" ))
 
-
-  slack:
-    webhook: (( vault "secret/pipelines/blacksmith-boshrelease/slack:webhook" ))
-    channel: "#botspam"
-    blob_success:  '(( concat "$BUILD_PIPELINE_NAME: New version of $BUILD_JOB_NAME was detected, and updated in master. <" meta.url "/pipelines/$BUILD_PIPELINE_NAME| Cut a new release?>" ))'
-    blob_failure:  '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update the blob for $BUILD_JOB_NAME>" ))'
 
 jobs:
 - name: blacksmith
@@ -71,13 +72,21 @@ jobs:
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
         BRANCH:         (( grab meta.github.branch ))
+    on_success:
+      put: notify
+      params:
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: update-blob job '$BUILD_JOB_NAME' succeeded.
+        ok:      yes
+        link:    (( grab meta.shout.links.build ))
     on_failure:
       put: notify
       params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: update-blob job '$BUILD_JOB_NAME' failed.
+        ok:      no
+        link:    (( grab meta.shout.links.build ))
+
   - put: git
     params:
       rebase: true
@@ -85,17 +94,17 @@ jobs:
     on_success:
       put: notify
       params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_success ))
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: A new version of '$BUILD_JOB_NAME' has been added to the BOSH release.
+        ok:      yes
+        link:    (( grab meta.shout.links.pipeline ))
     on_failure:
       put: notify
       params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: Failed to push blob changes to git (for '$BUILD_JOB_NAME').
+        ok:      no
+        link:    (( grab meta.shout.links.build ))
 
 - name: safe
   public: true
@@ -133,13 +142,21 @@ jobs:
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
         BRANCH:         (( grab meta.github.branch ))
+    on_success:
+      put: notify
+      params:
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: update-blob job '$BUILD_JOB_NAME' succeeded.
+        ok:      yes
+        link:    (( grab meta.shout.links.build ))
     on_failure:
       put: notify
       params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: update-blob job '$BUILD_JOB_NAME' failed.
+        ok:      no
+        link:    (( grab meta.shout.links.build ))
+
   - put: git
     params:
       rebase: true
@@ -147,18 +164,17 @@ jobs:
     on_success:
       put: notify
       params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_success ))
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: A new version of '$BUILD_JOB_NAME' has been added to the BOSH release.
+        ok:      yes
+        link:    (( grab meta.shout.links.pipeline ))
     on_failure:
       put: notify
       params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
-
+        topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+        message: Failed to push blob changes to git (for '$BUILD_JOB_NAME').
+        ok:      no
+        link:    (( grab meta.shout.links.build ))
 
 groups:
 - name: blobs
@@ -170,12 +186,13 @@ resources:
 - name: blacksmith
   type: github-release
   source:
-    user: cloudfoundry-community
-    repository: blacksmith
+    user:         blacksmith-community
+    repository:   blacksmith
     access_token: (( grab meta.github.access_token ))
+
 - name: safe
   type: github-release
   source:
-    user: starkandwayne
-    repository: safe
+    user:         starkandwayne
+    repository:   safe
     access_token: (( grab meta.github.access_token ))
