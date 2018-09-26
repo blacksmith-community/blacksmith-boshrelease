@@ -35,3 +35,7 @@ Bumped https://github.com/starkandwayne/safe to v0.9.6
 # Safe
 
 - Bumped Safe to v0.9.6
+
+# Blacksmith
+
+- Bumped Blacksmith to v0.0.9
