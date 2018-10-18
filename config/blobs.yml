@@ -1,7 +1,7 @@
-blacksmith/blacksmith-0.4.1.tar.bz2:
-  size: 2866339
-  object_id: a2f7e5f3-0a2f-4fef-5610-b75ed819285c
-  sha: 47684de107ded985b217ecc39473305c1b48c01d
+blacksmith/blacksmith-0.4.2.tar.bz2:
+  size: 2871226
+  object_id: b508ba2e-75bb-419c-763f-8ba0a1293132
+  sha: 236fd3d69e30df28a153ae3fbbe0235ff5d74200
 safe/safe:
   size: 8060826
   object_id: 338e05eb-1f44-47b1-5df0-2e6c84813ea2
