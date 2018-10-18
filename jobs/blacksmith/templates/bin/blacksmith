@@ -39,6 +39,7 @@ case $1 in
     shopt -s nullglob
     echo $$ > $PIDFILE
     echo "Starting up Blacksmith Broker process"
+    export BLACKSMITH_OPER_HOME=/root
     exec chpst -u root:root blacksmith \
          -c /var/vcap/jobs/blacksmith/config/blacksmith.conf \
          /var/vcap/jobs/*-forge/templates \
