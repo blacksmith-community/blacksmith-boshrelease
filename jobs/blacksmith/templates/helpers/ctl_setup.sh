@@ -30,9 +30,12 @@ redirect_output ${output_label}
 export HOME=${HOME:-/home/vcap}
 
 # Add all packages' /bin & /sbin into $PATH
-for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin)
-do
-  export PATH=${package_bin_dir}:$PATH
+for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin | grep toolbelt)
+do export PATH="${package_bin_dir}:$PATH"
+done
+
+for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin | grep -v toolbelt)
+do export PATH="${package_bin_dir}:$PATH"
 done
 
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
