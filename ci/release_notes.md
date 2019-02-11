@@ -1,20 +1,10 @@
+# Improvements
 
-# Safe
+- De-prioritize external toolbelt packges
 
-- Bumped Safe to v0.9.9
-
-# Safe
-
-- Bumped Safe to v1.0.0
-
-# Safe
-
-- Bumped Safe to v1.0.1
-
-# Safe
-
-- Bumped Safe to v1.0.2
-
-# Safe
+# Software Updates
 
 - Bumped Safe to v1.1.0
+
+- Use Xenial for everything
+
