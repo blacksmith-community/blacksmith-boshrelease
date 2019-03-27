@@ -82,7 +82,7 @@ YAML
 header "Creating final release..."
 bosh -n create-release --final --version "${VERSION}"
 bosh -n create-release releases/$RELEASE_NAME/$RELEASE_NAME-$VERSION.yml \
-             --tarball releases/$RELEASE_NAME/$RELEASE_NAME-$VERSION.tgz
+              --tarball releases/$RELEASE_NAME/$RELEASE_NAME-$VERSION.tgz
 cd -
 
 RELEASE_TGZ=$REPO_ROOT/releases/$RELEASE_NAME/$RELEASE_NAME-$VERSION.tgz
