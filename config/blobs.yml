@@ -6,7 +6,7 @@ safe/safe:
   size: 8305617
   object_id: 93d337a1-db73-4b07-6612-7f7549af8154
   sha: 9e2953994c0a59511a99b7d7fbf0ddef2f6aaf14
-vault/vault_0.6.4_linux_amd64.zip:
-  size: 12221196
-  object_id: c84aefe6-ace4-4b75-897a-05af5f197f29
-  sha: a333a73f9ad0fb137908c8be3d745ce295935e1c
+vault/vault_1.0.2_linux_amd64.zip:
+  size: 35862496
+  object_id: 68102f2c-65fd-48df-41e3-d309d853ca39
+  sha: bf1afd9d0d16eb474b9fdb0e1fd7e063ecd92edc
