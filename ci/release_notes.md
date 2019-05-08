@@ -10,3 +10,7 @@
 # Vault
 
 - Bumped Vault to v1.0.2
+
+# Safe
+
+- Bumped Safe to v1.1.0
