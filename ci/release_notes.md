@@ -22,3 +22,7 @@
 # Safe
 
 - Bumped Safe to v1.2.1
+
+# Safe
+
+- Bumped Safe to v1.3.0
