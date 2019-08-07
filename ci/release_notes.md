@@ -26,3 +26,7 @@
 # Safe
 
 - Bumped Safe to v1.3.0
+
+# Blacksmith
+
+- Bumped Blacksmith to v0.4.2
