@@ -67,7 +67,7 @@ jobs:
         BLOB_NAME:   Blacksmith
         BLOB_BINARY: blacksmith-*.tar.bz2
         BLOB_URL:    https://github.com/cloudfoundry-community/blacksmith
-        BLOB_DESTINATION: blacksmith/blacksmith-${VERSION}.tar.bz2
+        BLOB_DESTINATION: blacksmith
         BLOB_CLEANUP:     blacksmith/blacksmith.*
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
