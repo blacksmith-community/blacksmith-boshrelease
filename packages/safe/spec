@@ -2,4 +2,4 @@
 name: safe
 dependencies: []
 files:
-- safe/safe
+- safe/safe-linux-amd64
