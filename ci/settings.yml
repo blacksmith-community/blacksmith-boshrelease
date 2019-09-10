@@ -137,8 +137,8 @@ jobs:
         BLOB_NAME:   Safe
         BLOB_BINARY: safe-linux-amd64
         BLOB_URL:    https://github.com/starkandwayne/safe
-        BLOB_DESTINATION: safe/safe
-        BLOB_CLEANUP:     safe/safe.*
+        BLOB_DESTINATION: safe
+        BLOB_CLEANUP:     safe/safe*
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
         BRANCH:         (( grab meta.github.branch ))
