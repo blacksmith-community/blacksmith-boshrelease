@@ -116,6 +116,14 @@ straight.
 There is no default.  If you don't specify this, you don't get
 anything identifying in the management interface.
 
+### shareable: (true|false)
+
+Sets the Shareable in the Catalog API call.  After updating this flag
+you need to deploy to update the blacksmith instance config file, then
+cause any PaaS using blacksmith to re-read the catalog.  On Cloud
+Foundry you can run `cf create-service-broker` and
+`cf update-service-broker` to reread the catalog.
+
 ### broker.username: _some-username_
 
 A (preferably randomized) username to use to secure the Blacksmith
