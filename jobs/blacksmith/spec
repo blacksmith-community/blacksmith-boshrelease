@@ -27,6 +27,10 @@ properties:
     description: "Environment tag, for the Blacksmith Management UI"
     default: ""
 
+  shareable:
+    description: "Enable flag to tell Cloud Foundry user can share services between orgs and spaces"
+    default: false
+
   broker.port:
     description: "port to run blacksmith"
     default: 3000
