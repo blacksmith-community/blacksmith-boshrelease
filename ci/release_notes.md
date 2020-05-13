@@ -6,3 +6,7 @@
 # Safe
 
 - Bumped Safe to v1.5.5
+
+# Safe
+
+- Bumped Safe to v1.5.6
