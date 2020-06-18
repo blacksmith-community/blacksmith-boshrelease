@@ -2,6 +2,14 @@ blacksmith/blacksmith-0.5.1.tar.bz2:
   size: 2865652
   object_id: 10c1c20a-42d9-4c44-5c2f-332a0f893f3c
   sha: sha256:ccb7b4dda60830c2ac43c19d05152bf313be1a1e76b4c077eb6d3686e2a77878
+nginx/nginx-1.19.0.tar.gz:
+  size: 1043748
+  object_id: 2c686d73-da03-4d3f-533d-807cd6b980d1
+  sha: sha256:44a616171fcd7d7ad7c6af3e6f3ad0879b54db5a5d21be874cd458b5691e36c8
+nginx/pcre-8.44.tar.gz:
+  size: 2090750
+  object_id: 5d0939e6-3e00-471a-5c2e-ffedc5446c39
+  sha: sha256:aecafd4af3bd0f3935721af77b889d9024b2e01d96b58471bd91a3063fb47728
 safe/safe-linux-amd64:
   size: 10811688
   object_id: 97549018-fa65-4f62-486f-62b068ee90f0

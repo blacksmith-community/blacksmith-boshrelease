@@ -9,3 +9,9 @@ check process blacksmith
   start program "/var/vcap/jobs/blacksmith/bin/monit_debugger blacksmith_ctl '/var/vcap/jobs/blacksmith/bin/blacksmith start'"
   stop  program "/var/vcap/jobs/blacksmith/bin/monit_debugger blacksmith_ctl '/var/vcap/jobs/blacksmith/bin/blacksmith stop'"
   group vcap
+
+check process nginx
+  with pidfile   /var/vcap/sys/run/blacksmith/nginx.pid
+  start program "/var/vcap/jobs/blacksmith/bin/nginx start"
+  stop program  "/var/vcap/jobs/blacksmith/bin/nginx stop"
+  group vcap

@@ -4,10 +4,12 @@ packages:
   - blacksmith
   - safe
   - vault
+  - nginx
 
 templates:
   bin/blacksmith: bin/blacksmith
   bin/vault:      bin/vault
+  bin/nginx:      bin/nginx
 
   bin/monit_debugger: bin/monit_debugger
   data/properties.sh.erb: data/properties.sh
@@ -18,6 +20,10 @@ templates:
   config/cloud-config.yml: config/cloud-config.yml
 
   config/vault.conf: config/vault.conf
+
+  config/nginx.conf:    config/nginx.conf
+  config/tls/nginx.pub: config/tls/nginx.pub
+  config/tls/nginx.key: config/tls/nginx.key
 
 properties:
   debug:
@@ -40,6 +46,36 @@ properties:
   broker.password:
     description: "password for blacksmith broker"
     default: blacksmith
+
+  broker.tls.enabled:
+    description: "Should the blacksmith broker use TLS and redirect http to https?"
+    default: false
+  broker.tls.port:
+    description: "Which port should blacksmith listen on for https traffic?"
+    default: 443
+  broker.tls.key:
+    description: "TLS private key (PEM encoded), used for the HTTPS API and Web UI"
+  broker.tls.certificate:
+    description: "TLS Certificate (PEM encoded), used for the HTTPS API and Web UI"
+  broker.tls.reuse-after:
+    description: "How long (in hours) before rotating cryptographic parameters"
+    default: 2
+  broker.tls.ciphers:
+    description: "Which SSL/TLS ciphers to allow, used for the HTTPS API and Web UI"
+    default: "ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:HIGH:!MD5:!aNULL:!EDH"
+  broker.tls.protocols:
+    description: "Which SSL/TLS protocols to allow, used for the HTTPS API and Web UI"
+    default: "TLSv1 TLSv1.1 TLSv1.2"
+
+  nginx.workers:
+    description: "Number of nginx workers"
+    default: 2
+  nginx.connections:
+    description: "Number of nginx connections per worker"
+    default: 8192
+  nginx.keepalive:
+    description: "Timeout for keep-alive connections"
+    default: "75 20"
 
   bosh.username:
     description: "username for bosh"
