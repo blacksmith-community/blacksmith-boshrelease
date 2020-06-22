@@ -1,0 +1,9 @@
+<% if_p("broker.tls.certificate") do |cert|
+  if !cert.match('CERTIFICATE')
+    cert = cert.gsub(/^(.{40}).*/, '\1...')
+    raise "broker.tls.certificate '#{cert}' does not look like a TLS certificate"
+  end
+%>
+<%= p('broker.tls.certificate') %>
+<% end %>
+
