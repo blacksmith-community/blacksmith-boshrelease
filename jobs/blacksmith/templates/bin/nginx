@@ -20,7 +20,7 @@ case $1 in
 
     echo "$(date) starting up nginx (pid $$)"
     echo $$ > $PIDFILE
-    exec /var/vcap/packages/nginx/sbin/nginx \
+    exec /var/vcap/packages/blacksmith-nginx/sbin/nginx \
       -c $JOB_DIR/config/nginx.conf
     ;;
 
