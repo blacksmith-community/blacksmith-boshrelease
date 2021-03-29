@@ -11,9 +11,9 @@ nginx/pcre-8.44.tar.gz:
   object_id: 5d0939e6-3e00-471a-5c2e-ffedc5446c39
   sha: sha256:aecafd4af3bd0f3935721af77b889d9024b2e01d96b58471bd91a3063fb47728
 safe/safe-linux-amd64:
-  size: 10876430
-  object_id: 70ed5c4c-9bda-4ff8-52aa-aaaa85403ea7
-  sha: sha256:31634da528762ff7e9b76a4653bca092ec94ea854cbccad7c791022a0e03ab15
+  size: 9970944
+  object_id: 2ab9d8e6-2b47-4597-7a1b-11a478ba195f
+  sha: sha256:7f5be0cc26b92b278c78d33b0c77d83933f597b37c09fa3c92a5a4dfe6c8410c
 vault/vault_1.0.2_linux_amd64.zip:
   size: 35862496
   object_id: 68102f2c-65fd-48df-41e3-d309d853ca39
