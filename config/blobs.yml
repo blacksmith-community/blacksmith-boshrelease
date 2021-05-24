@@ -1,7 +1,7 @@
-blacksmith/blacksmith-0.9.0.tar.bz2:
-  size: 7416466
-  object_id: f516b176-6e87-43de-6193-a23b00ae6182
-  sha: sha256:cf64b27f9077e66e114f943f6968dd11d47ade7b31b4d069229320fe07ffa573
+blacksmith/blacksmith-0.9.1.tar.bz2:
+  size: 6785047
+  object_id: 99671510-fee7-440a-79e5-dd7233bc0d2a
+  sha: sha256:ca848ed5371d8e22fdb797f1bcdff09f5041e0113d260b8d25550bc30227b57c
 nginx/nginx-1.19.0.tar.gz:
   size: 1043748
   object_id: 2c686d73-da03-4d3f-533d-807cd6b980d1
