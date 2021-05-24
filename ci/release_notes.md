@@ -6,3 +6,7 @@
 # Blacksmith
 
 - Bumped Blacksmith to v0.9.1
+
+# Safe
+
+- Bumped Safe to v1.6.1
