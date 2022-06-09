@@ -24,6 +24,7 @@ templates:
   config/nginx.conf:    config/nginx.conf
   config/tls/nginx.pub: config/tls/nginx.pub
   config/tls/nginx.key: config/tls/nginx.key
+  config/tls/blacksmith_services_ca: config/tls/blacksmith_services_ca
 
 properties:
   debug:
@@ -97,3 +98,6 @@ properties:
   bosh.releases:
     description: "A list of releases to upload.  Each item in the list should have a `name`, `version`, `url` and `sha1` parameter."
     default: []
+
+  blacksmith_services_ca.tls.ca_cert:
+    description: PEM encoded CA certificate provided by blacksmith

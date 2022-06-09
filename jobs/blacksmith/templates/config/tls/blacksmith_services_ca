@@ -1,0 +1,1 @@
+<%= p('blacksmith_services_ca.tls.ca_cert') %>
