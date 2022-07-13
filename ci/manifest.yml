@@ -14,6 +14,9 @@ instance_groups:
     - name: example-blacksmith-plans
       release: blacksmith
       properties:
+        blacksmith_services_ca:
+          tls:
+            ca_cert: default
         plans:
           standalone:
             #name: Standalone Instance
