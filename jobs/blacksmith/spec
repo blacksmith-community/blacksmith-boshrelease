@@ -67,6 +67,37 @@ properties:
   broker.tls.protocols:
     description: "Which SSL/TLS protocols to allow, used for the HTTPS API and Web UI"
     default: "TLSv1 TLSv1.1 TLSv1.2"
+  
+  shield.enabled:
+    description: "Enable SHIELD backups managed by Blacksmith"
+    default: false
+  shield.address:
+    description: "The SHIELD core address - NOTE: must include the protocol (e.g. 'http' or 'https')"
+  shield.skip_ssl_validation:
+    description: "Skip SSL validation when connecting to the SHIELD core"
+    default: true
+  shield.agent:
+    description: "The SHIELD agent IP:PORT - usually the same address of the core with port 5444"
+  shield.auth_method:
+    description: "The authentication method - must be one of 'local' or 'token'"
+    default: token
+  shield.username:
+    description: "The authentication username. Only used if auth_method is 'local'"
+  shield.password:
+    description: "The authentication password. Only used if auth_method is 'local'"
+  shield.token:
+    description: "The authentication token. Only used if auth_method is 'token'"
+  shield.schedule:
+    description: "Optional. The SHIELD schedule, will default to 'daily 6am' if omitted"
+  shield.retain:
+    description: "Optional. The SHIELD retention policy, will default to '7d' if omitted"
+  shield.tenant:
+    description: "The tenant UUID where jobs and targets will be scheduled - NOTE: the full UUID is required"
+  shield.store:
+    description: "The store UUID where scheduled backups will be stored - NOTE: the full UUID is required"
+  shield.enabled_on_targets:
+    description: "The list of targets that should be backed up from SHIELD (e.g. 'rabbitmq', 'redis', etc.)"
+    default: [rabbitmq]
 
   nginx.workers:
     description: "Number of nginx workers"
