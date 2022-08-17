@@ -27,6 +27,10 @@ instance_groups:
             password: ((bosh_password))
             address:  https://((bosh_ip)):25555
 
+          # TODO: make this attribute optional or provide a real CA certificate.
+          blacksmith_services_ca:
+            tls: { ca_cert: "-" }
+
 variables:
   - name: broker_password
     type: password
