@@ -1,1 +1,1 @@
-<%= p('blacksmith_services_ca.tls.ca_cert') %>
+<% if p('blacksmith_services_ca.tls.ca_cert', '') != '' %><%= p('blacksmith_services_ca.tls.ca_cert') %><% end %>
