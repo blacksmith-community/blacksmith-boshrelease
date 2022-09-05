@@ -92,9 +92,9 @@ properties:
   shield.retain:
     description: "Optional. The SHIELD retention policy, will default to '7d' if omitted"
   shield.tenant:
-    description: "The tenant UUID where jobs and targets will be scheduled - NOTE: the full UUID is required"
+    description: "The tenant UUID where jobs and targets will be scheduled - NOTE: the full UUID or exact name is required"
   shield.store:
-    description: "The store UUID where scheduled backups will be stored - NOTE: the full UUID is required"
+    description: "The store UUID where scheduled backups will be stored - NOTE: the full UUID or exact name is required"
   shield.enabled_on_targets:
     description: "The list of targets that should be backed up from SHIELD (e.g. 'rabbitmq', 'redis', etc.)"
     default: [rabbitmq]
