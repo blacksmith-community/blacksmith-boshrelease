@@ -46,6 +46,6 @@ stemcells:
 
 releases:
 - name:    blacksmith
-  version: 1.6.4
-  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v1.6.4/blacksmith-1.6.4.tgz
-  sha1:    a1c80852773012931453c98ce245a1d2a91ddb24
+  version: 1.6.5
+  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v1.6.5/blacksmith-1.6.5.tgz
+  sha1:    1def8e4e21d3ea95aaf16339d4dec64667538ae9
