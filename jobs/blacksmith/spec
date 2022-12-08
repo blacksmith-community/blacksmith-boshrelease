@@ -129,6 +129,9 @@ properties:
   bosh.releases:
     description: "A list of releases to upload.  Each item in the list should have a `name`, `version`, `url` and `sha1` parameter."
     default: []
+  bosh.network:
+    description: "Network name to be used for deploying services with bosh."
+    default: blacksmith
 
   blacksmith_services_ca.tls.ca_cert:
     description: PEM encoded CA certificate provided by blacksmith
