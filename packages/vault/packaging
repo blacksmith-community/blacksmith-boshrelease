@@ -4,12 +4,12 @@ set -eu
 # $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
 # $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
 
-# from https://releases.hashicorp.com/vault/1.0.2/vault_1.0.2_linux_amd64.zip
+# from https://releases.hashicorp.com/vault/1.14.0/vault_1.14.0_linux_amd64.zip
 
 mkdir ${BOSH_INSTALL_TARGET}/bin
 
 cd vault
-unzip vault_1.0.2_linux_amd64.zip
+unzip vault_1.14.0_linux_amd64.zip
 cp vault ${BOSH_INSTALL_TARGET}/bin
 
 chmod 0755 ${BOSH_INSTALL_TARGET}/bin/*
