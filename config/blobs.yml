@@ -1,7 +1,7 @@
-blacksmith/blacksmith-0.12.0.tar.bz2:
-  size: 7274034
-  object_id: 02c767e8-3b75-40fa-5ea1-d40e84b41e94
-  sha: sha256:84e1f6aa1950ae23efdb55dce265b8fabc40f1b7832474a3816057f68b4bba96
+blacksmith/blacksmith-0.13.0.tar.bz2:
+  size: 7667188
+  object_id: 10f90abb-9cad-4796-695e-b4ccba84d86a
+  sha: sha256:286f569ad13f8bed165a60a21b816168cab6431d03927f287aafd61ff9cf1282
 nginx/nginx-1.25.1.tar.gz:
   size: 1213919
   object_id: 9f47592c-bc07-4d9c-5065-ae95a60f7c8b
@@ -14,7 +14,7 @@ safe/safe-1.9.0-linux-amd64:
   size: 10378351
   object_id: 73fe790d-1400-4164-7fc5-863910ce7029
   sha: sha256:c8cd4e7fbdfad5155eff8b13ea0035922c7fd2aa74a0bedfbbba0aa3ab60e3da
-vault/vault_1.14.0_linux_amd64.zip:
-  size: 98051558
-  object_id: d1561c2b-e6e5-4f83-431d-4bf03c5b58c5
-  sha: sha256:3d5c27e35d8ed43d861e892fc7d8f888f2fda4319a36f344f8c09603fb184b50
+vault/vault_1.14.10_linux_amd64.zip:
+  size: 130077125
+  object_id: ded1abe3-99df-44b4-69bc-2b52d26e39a0
+  sha: sha256:5741d87fc4e33731e74224c72925457779690c1de85d2bf0cc7fc1b4c637d41d
