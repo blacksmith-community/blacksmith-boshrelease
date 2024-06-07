@@ -2,35 +2,35 @@
 meta:
   name:    blacksmith
   release: Blacksmith
-  target:  blacksmith@pipes
-  url:     https://pipes.starkandwayne.com
+  target:  pipes/blacksmith
+  url:     https://pipes.scalecf.com
 
   manifest:
     path: ci/manifest.yml
 
   bosh-lite:
-    target:   https://10.128.4.73:25555
+    target:   ((thunder-dome.url))
     username: ((thunder-dome.username))
     password: ((thunder-dome.password))
     cacert:   ((thunder-dome.ca-certificate))
 
   aws:
-    access_key: ((cfcommunity.access))
-    secret_key: ((cfcommunity.secret))
+    access_key: ((cloudfoundry-community-aws.access_key_id))
+    secret_key: ((cloudfoundry-community-aws.secret_access_key))
 
   git:
-    name:  Stark & Wayne CI Bot
-    email: ci@starkandwayne.com
+    name:  ((cloudfoundry-community-ci-bot-github.name))
+    email: ((cloudfoundry-community-ci-bot-github.email))
 
   github:
     owner:  blacksmith-community
     repo:   blacksmith-boshrelease
     branch: master
-    private_key:  ((starkandwayne-bot-github.private-key))
-    access_token: ((starkandwayne-bot-github.access-token))
+    private_key:  ((cloudfoundry-community-ci-bot-github.private_key))
+    access_token: ((cloudfoundry-community-ci-bot-github.access_token_rw))
 
   shout:
-    url:      http://10.128.4.65:7109
+    url:      ((shout.url))
     username: ((shout.username))
     password: ((shout.password))
 
@@ -136,7 +136,7 @@ jobs:
         BLOB_DIR:    safe
         BLOB_NAME:   Safe
         BLOB_BINARY: safe-linux-amd64
-        BLOB_URL:    https://github.com/starkandwayne/safe
+        BLOB_URL:    https://github.com/cloudfoundry-community/safe
         BLOB_DESTINATION: safe
         BLOB_CLEANUP:     safe/safe*
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
@@ -193,6 +193,6 @@ resources:
 - name: safe
   type: github-release
   source:
-    user:         starkandwayne
+    user:         cloudfoundry-community
     repository:   safe
     access_token: (( grab meta.github.access_token ))
