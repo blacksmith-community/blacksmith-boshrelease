@@ -12,7 +12,7 @@ nginx/pcre2-10.42.tar.gz:
   sha: sha256:c33b418e3b936ee3153de2c61cc638e7e4fe3156022a5c77d0711bcbb9d64f1f
 safe/safe-1.9.0-linux-amd64:
   size: 10378351
-  object_id: 73fe790d-1400-4164-7fc5-863910ce7029
+  object_id: edfc745c-25cc-4917-5d56-dd01c7ed8777
   sha: sha256:c8cd4e7fbdfad5155eff8b13ea0035922c7fd2aa74a0bedfbbba0aa3ab60e3da
 vault/vault_1.14.10_linux_amd64.zip:
   size: 130077125
