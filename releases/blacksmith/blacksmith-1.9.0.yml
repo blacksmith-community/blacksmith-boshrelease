@@ -1,0 +1,44 @@
+name: blacksmith
+version: 1.9.0
+commit_hash: 3c76b71
+uncommitted_changes: false
+jobs:
+- name: blacksmith
+  version: b4c366847512e01a9093a328dbc1937405a043b79c5ffac8816f6d3d3017568c
+  fingerprint: b4c366847512e01a9093a328dbc1937405a043b79c5ffac8816f6d3d3017568c
+  sha1: sha256:e290d5aab0980aa1a9d8bd5cccc8ca90523d9319eef8a6fdca9b1bb3cf994657
+  packages:
+  - blacksmith
+  - safe
+  - vault
+  - blacksmith-nginx
+- name: example-blacksmith-plans
+  version: 023bdde9047198548a571ff12d016c33804656f98161851093a6329b133204d3
+  fingerprint: 023bdde9047198548a571ff12d016c33804656f98161851093a6329b133204d3
+  sha1: sha256:ae66684f4ccab77bfac1ece4a1f0b765be4dab7bc43c1f40b0c32795db5e93ef
+  packages: []
+packages:
+- name: blacksmith
+  version: 01e89360dec9f6ff63294a09212fa67a6e107f66cde44ce5a5af5e360ea9b67c
+  fingerprint: 01e89360dec9f6ff63294a09212fa67a6e107f66cde44ce5a5af5e360ea9b67c
+  sha1: sha256:2da30f1620ea06464ff7edd57941c11a72b23c2703027646b3460054f2e5cf44
+  dependencies: []
+- name: blacksmith-nginx
+  version: eb5e560310f9a1546a48cfbb521013d67610b84a6dfbfe7700ddac90679390d6
+  fingerprint: eb5e560310f9a1546a48cfbb521013d67610b84a6dfbfe7700ddac90679390d6
+  sha1: sha256:c6aab0c47bf65c4341f3fa8bc611af1eb7bcda32c9d2b30bf4a24b4afbd02d02
+  dependencies: []
+- name: safe
+  version: a94d3661e8a7747c25010253587ad057aa073eb758a5ba0a2667f30c91d7f737
+  fingerprint: a94d3661e8a7747c25010253587ad057aa073eb758a5ba0a2667f30c91d7f737
+  sha1: sha256:23a3017cf0d00e6426ea75ebb0720495691f48f0db818b2b080f012dddfcc01a
+  dependencies: []
+- name: vault
+  version: 2ef16d10601962b5c0188ee7f06852ad003a568a88388c2656cb28db39a0daed
+  fingerprint: 2ef16d10601962b5c0188ee7f06852ad003a568a88388c2656cb28db39a0daed
+  sha1: sha256:cdcc076ca13f739c16d5cfc0907efe47df1ccce8ef18302b911eb13973ed9c0c
+  dependencies: []
+license:
+  version: f7a524643770078881bdfa03661a6aa2dec6f55e7628ac9dc450e12b933c3e19
+  fingerprint: f7a524643770078881bdfa03661a6aa2dec6f55e7628ac9dc450e12b933c3e19
+  sha1: sha256:2bf2d9110cf263ee53bfcf9b19672df2e1ee80026ef59345016a3907c3f8f5cb
