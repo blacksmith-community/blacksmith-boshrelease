@@ -67,7 +67,7 @@ properties:
   broker.tls.protocols:
     description: "Which SSL/TLS protocols to allow, used for the HTTPS API and Web UI"
     default: "TLSv1 TLSv1.1 TLSv1.2"
-  
+
   shield.enabled:
     description: "Enable SHIELD backups managed by Blacksmith"
     default: false
@@ -132,6 +132,8 @@ properties:
   bosh.network:
     description: "Network name to be used for deploying services with bosh."
     default: blacksmith
+  bosh.ca_cert:
+    description: "The CA Certificate for BOSH_CA_CERT."
 
   blacksmith_services_ca.tls.ca_cert:
     description: PEM encoded CA certificate provided by blacksmith

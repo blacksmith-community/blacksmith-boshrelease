@@ -6,6 +6,8 @@ source /var/vcap/jobs/blacksmith/data/properties.sh
 exec >>$LOG_DIR/blacksmith.log 2>&1
 <% if p('debug') %>export BLACKSMITH_DEBUG=1<% end %>
 
+export BOSH_CA_CERT="<% p(bosh.ca_cert') -%>"
+
 case $1 in
 
   start)
