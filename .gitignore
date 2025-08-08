@@ -21,3 +21,4 @@ my*.yml
 # for GOPATH set to repo root
 /src/blacksmith/bin
 /src/blacksmith/pkg
+*.tgz

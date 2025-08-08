@@ -4,9 +4,12 @@ set -eu
 source /var/vcap/jobs/blacksmith/helpers/ctl_setup.sh blacksmith
 source /var/vcap/jobs/blacksmith/data/properties.sh
 exec >>$LOG_DIR/blacksmith.log 2>&1
-<% if p('debug') %>export BLACKSMITH_DEBUG=1<% end %>
 
-export BOSH_CA_CERT="<% p(bosh.ca_cert') -%>"
+<% if p('debug') %>export BLACKSMITH_DEBUG=1<% end -%>
+
+export BOSH_CA_CERT=<<BOSH_CA_CERT
+<%= p(bosh.ca_cert') %>
+BOSH_CA_CERT
 
 case $1 in
 
@@ -20,7 +23,7 @@ case $1 in
       $setup
     done
 
-    # don't start the broker up until the Vault is running
+    # don not start the broker up until the Vault is running
     n=21
     echo "Waiting up to 20s for the local Vault to become available..."
     while [[ $n -ne 0 ]]; do
