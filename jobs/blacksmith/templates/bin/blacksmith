@@ -8,7 +8,7 @@ exec >>$LOG_DIR/blacksmith.log 2>&1
 <% if p('debug') %>export BLACKSMITH_DEBUG=1<% end -%>
 
 export BOSH_CA_CERT=<<BOSH_CA_CERT
-<%= p(bosh.ca_cert') %>
+<%= p('bosh.ca_cert') -%>
 BOSH_CA_CERT
 
 case $1 in
