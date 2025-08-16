@@ -4,12 +4,10 @@ packages:
   - blacksmith
   - safe
   - vault
-  - blacksmith-nginx
 
 templates:
   bin/blacksmith: bin/blacksmith
   bin/vault:      bin/vault
-  bin/nginx:      bin/nginx
   bin/pre-start:  bin/pre-start
 
   config/blacksmith.conf:  config/blacksmith.conf
@@ -18,9 +16,8 @@ templates:
 
   config/vault.conf: config/vault.conf
 
-  config/nginx.conf:    config/nginx.conf
-  config/tls/nginx.pub: config/tls/nginx.pub
-  config/tls/nginx.key: config/tls/nginx.key
+  config/tls/blacksmith.pub: config/tls/blacksmith.pub
+  config/tls/blacksmith.key: config/tls/blacksmith.key
   config/tls/blacksmith_services_ca: config/tls/blacksmith_services_ca
 
 properties:
@@ -96,16 +93,6 @@ properties:
     description: "The list of targets that should be backed up from SHIELD (e.g. 'rabbitmq', 'redis', etc.)"
     default: [rabbitmq]
 
-  nginx.workers:
-    description: "Number of nginx workers"
-    default: 2
-  nginx.connections:
-    description: "Number of nginx connections per worker"
-    default: 8192
-  nginx.keepalive:
-    description: "Timeout for keep-alive connections"
-    default: "75 20"
-
   bosh.username:
     description: "username for bosh"
     default: admin
@@ -141,6 +128,3 @@ properties:
   limits.memory.vault:
     description: "Memory limit for the vault process"
     default: "1G"
-  limits.memory.nginx:
-    description: "Memory limit for the nginx process"
-    default: "256M"

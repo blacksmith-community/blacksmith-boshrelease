@@ -29,13 +29,3 @@ processes:
   hooks:
     pre_start: /var/vcap/jobs/blacksmith/bin/pre-start
 
-- name: nginx
-  executable: /var/vcap/packages/blacksmith-nginx/sbin/nginx
-  args:
-  - -c
-  - /var/vcap/jobs/blacksmith/config/nginx.conf
-  - -g
-  - "daemon off;"
-  limits:
-    memory: <%= p('limits.memory.nginx') %>
-    open_files: 65536

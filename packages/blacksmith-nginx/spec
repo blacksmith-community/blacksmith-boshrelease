@@ -1,5 +1,0 @@
----
-name: blacksmith-nginx
-files:
-  - nginx/nginx-*.tar.gz
-  - nginx/pcre2-*.tar.gz
