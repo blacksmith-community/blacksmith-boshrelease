@@ -55,10 +55,10 @@ properties:
     default: 2
   broker.tls.ciphers:
     description: "Which SSL/TLS ciphers to allow, used for the HTTPS API and Web UI"
-    default: "ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:HIGH:!MD5:!aNULL:!EDH"
+    default: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:HIGH:!MD5:!aNULL:!EDH"
   broker.tls.protocols:
     description: "Which SSL/TLS protocols to allow, used for the HTTPS API and Web UI"
-    default: "TLSv1 TLSv1.1 TLSv1.2"
+    default: "TLSv1.2 TLSv1.3"
 
   shield.enabled:
     description: "Enable SHIELD backups managed by Blacksmith"

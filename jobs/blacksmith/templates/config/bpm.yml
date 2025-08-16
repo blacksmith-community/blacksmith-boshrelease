@@ -1,3 +1,4 @@
+---
 processes:
 - name: vault
   executable: /var/vcap/packages/vault/bin/vault
@@ -10,19 +11,34 @@ processes:
     memory: <%= p('limits.memory.vault') %>
     open_files: 65536
   ephemeral_disk: true
+  persistent_disk: true
+  unsafe:
+    privileged: true
+  capabilities:
+  - NET_BIND_SERVICE
 
 - name: blacksmith
   executable: /var/vcap/packages/blacksmith/bin/blacksmith
   args:
   - -c
   - /var/vcap/jobs/blacksmith/config/blacksmith.conf
-  env:
-<% if p('debug') %>    BLACKSMITH_DEBUG: "1"
-<% end %>    BLACKSMITH_OPER_HOME: /root
+  ephemeral_disk: true
+  persistent_disk: true
   limits:
     memory: <%= p('limits.memory.blacksmith') %>
     open_files: 65536
-  ephemeral_disk: true
   hooks:
     pre_start: /var/vcap/jobs/blacksmith/bin/pre-start
-
+  unsafe:
+    privileged: true
+    host_pid_namespace: true
+    unrestricted_volumes:
+    - path: /var/vcap/instance
+      writable: false
+  capabilities:
+  - NET_BIND_SERVICE
+  env:
+<% if p('debug') -%>
+BLACKSMITH_DEBUG: "1"
+<% end -%>
+  BLACKSMITH_OPER_HOME: /root
