@@ -6,8 +6,6 @@ packages:
   - vault
 
 templates:
-  bin/blacksmith: bin/blacksmith
-  bin/vault:      bin/vault
   bin/pre-start:  bin/pre-start
 
   config/blacksmith.conf:  config/blacksmith.conf
