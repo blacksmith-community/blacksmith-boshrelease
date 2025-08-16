@@ -1,0 +1,41 @@
+processes:
+- name: vault
+  executable: /var/vcap/packages/vault/bin/vault
+  args:
+  - server
+  - -config=/var/vcap/jobs/blacksmith/config/vault.conf
+  env:
+    VAULT_LOG_LEVEL: <%= p('debug') ? 'DEBUG' : 'INFO' %>
+  limits:
+    memory: <%= p('limits.memory.vault') %>
+    open_files: 65536
+  ephemeral_disk: true
+  additional_volumes:
+  - path: /var/vcap/store/blacksmith
+    writable: true
+
+- name: blacksmith
+  executable: /var/vcap/packages/blacksmith/bin/blacksmith
+  args:
+  - -c
+  - /var/vcap/jobs/blacksmith/config/blacksmith.conf
+  env:
+<% if p('debug') %>    BLACKSMITH_DEBUG: "1"
+<% end %>    BLACKSMITH_OPER_HOME: /root
+  limits:
+    memory: <%= p('limits.memory.blacksmith') %>
+    open_files: 65536
+  ephemeral_disk: true
+  hooks:
+    pre_start: /var/vcap/jobs/blacksmith/bin/pre-start
+
+- name: nginx
+  executable: /var/vcap/packages/blacksmith-nginx/sbin/nginx
+  args:
+  - -c
+  - /var/vcap/jobs/blacksmith/config/nginx.conf
+  - -g
+  - "daemon off;"
+  limits:
+    memory: <%= p('limits.memory.nginx') %>
+    open_files: 65536

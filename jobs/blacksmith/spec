@@ -10,14 +10,11 @@ templates:
   bin/blacksmith: bin/blacksmith
   bin/vault:      bin/vault
   bin/nginx:      bin/nginx
-
-  bin/monit_debugger: bin/monit_debugger
-  data/properties.sh.erb: data/properties.sh
-  helpers/ctl_setup.sh: helpers/ctl_setup.sh
-  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+  bin/pre-start:  bin/pre-start
 
   config/blacksmith.conf:  config/blacksmith.conf
   config/cloud-config.yml: config/cloud-config.yml
+  config/bpm.yml:          config/bpm.yml
 
   config/vault.conf: config/vault.conf
 
@@ -137,3 +134,13 @@ properties:
 
   blacksmith_services_ca.tls.ca_cert:
     description: PEM encoded CA certificate provided by blacksmith
+
+  limits.memory.blacksmith:
+    description: "Memory limit for the blacksmith process"
+    default: "2G"
+  limits.memory.vault:
+    description: "Memory limit for the vault process"
+    default: "1G"
+  limits.memory.nginx:
+    description: "Memory limit for the nginx process"
+    default: "256M"

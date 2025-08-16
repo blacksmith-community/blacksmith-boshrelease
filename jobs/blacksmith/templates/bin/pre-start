@@ -1,0 +1,24 @@
+#!/bin/bash
+set -eu
+
+# BPM pre-start script for blacksmith job
+JOB_NAME='<%= name %>'
+
+echo "Pre-start: Setting up directories and permissions..."
+
+export STORE_DIR="/var/vcap/store/$JOB_NAME"
+mkdir -p "${STORE_DIR}"
+chown vcap:vcap "${STORE_DIR}"
+chmod 775 "${STORE_DIR}"
+
+echo "Setting up .vault directory for storage of seal key / root token"
+mkdir -p "${STORE_DIR}/.vault"
+
+echo "Finding all \`configure-blacksmith\` jobs scripts and running them"
+shopt -s nullglob
+for configure_script in /var/vcap/jobs/*/bin/configure-blacksmith; do
+  echo "Pre-start: Executing Blacksmith configure script ${configure_script}..."
+  ${configure_script}
+done
+
+echo "Pre-start: Setup completed successfully."
