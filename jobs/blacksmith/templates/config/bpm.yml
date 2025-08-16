@@ -10,9 +10,6 @@ processes:
     memory: <%= p('limits.memory.vault') %>
     open_files: 65536
   ephemeral_disk: true
-  additional_volumes:
-  - path: /var/vcap/store/blacksmith
-    writable: true
 
 - name: blacksmith
   executable: /var/vcap/packages/blacksmith/bin/blacksmith
