@@ -3,6 +3,8 @@
 This is the BOSH release for deploying the Blacksmith Service
 Broker for Cloud Foundry to your infrastructure of choice.
 
+Blacksmith provides dynamic service provisioning through "Forges" that deploy dedicated service instances on-demand. It includes a Management Web UI for monitoring and includes built-in Vault integration for secrets management.
+
 ## Picking a BOSH Director
 
 The largest architectural decision that needs to be made when
@@ -38,20 +40,61 @@ There are probably more.  Check out the [Blacksmith Community
 Github organization][github] for the latest list of officially
 supported forges!
 
+## Release Structure
+
+### Jobs
+
+This BOSH release provides the following jobs:
+
+#### `blacksmith` Job
+The main Blacksmith broker job that includes:
+- **Blacksmith Broker**: Core service broker application
+- **Vault**: Embedded secrets management for storing service credentials
+- **BPM Integration**: Process management using BOSH Process Manager
+
+**Packages**: `blacksmith`, `vault`, `safe`
+
+**Key Templates**:
+- `bin/pre-start`: Pre-start script for setup and configuration
+- `config/blacksmith.conf`: Main broker configuration
+- `config/vault.conf`: Vault server configuration
+- `config/bpm.yml`: BPM process configuration
+- `config/cloud-config.yml`: BOSH cloud-config template
+- `config/tls/*`: TLS certificate and key templates
+
+#### `example-blacksmith-plans` Job
+Optional job providing example service plans configuration:
+- Template-based plan configuration
+- Example standalone service plans
+- Configuration scripts for plan setup
+
+**Templates**:
+- `bin/configure-blacksmith`: Plan configuration script
+- `plans/service.yml`: Service definition template
+- `plans/standalone/*`: Standalone service plan templates
+
+### Packages
+
+- **`blacksmith`**: Core Blacksmith broker binary
+- **`vault`**: HashiCorp Vault (v1.14.10) for secrets management
+- **`safe`**: Safe CLI utility for Vault operations
+
 ## Deploying
 
-An example manifest has been provided in
-`manifests/blacksmith.yml`.  It requires the BOSH v2 CLI, and
-needs you to provide some variables:
+Two example manifests are provided:
+- `manifests/blacksmith.yml`: Basic deployment example
+- `manifests/blacksmith-bpm.yml`: BPM-enabled deployment
+
+The deployment requires the BOSH v2 CLI and needs you to provide some variables:
 
   - **bosh_ip** - The IP address of a BOSH director to use for
     service deployment.
   - **bosh_username** - Username to authenticate to BOSH as.
-  - **bosh_password** - Password to authetnicate to BOSH as.
+  - **bosh_password** - Password to authenticate to BOSH as.
   - **blacksmith_ip** - A static IP address, in the `default`
     network, for deploying Blacksmith to.
 
-This is just an example.  You will want to write your own operator
+This is just an example. You will want to write your own operator
 files to include a Forge or two, and configure your plans,
 cloud-config, stemcells, etc.
 
@@ -70,6 +113,28 @@ bosh deploy -d blacksmith                      \
 Note that if your BOSH director has Credhub integrated, you don't
 need to manually set the `broker_password` var; one will be
 generated for you.
+
+## Modern Deployment Features
+
+### BPM Support
+This release includes full BPM (BOSH Process Manager) support for improved process management:
+- Process isolation and resource limits
+- Enhanced logging and monitoring
+- Automatic process restart and health checking
+- Memory limits configurable via `limits.memory.blacksmith` and `limits.memory.vault`
+
+### TLS Configuration
+Enhanced TLS support for production deployments:
+- Configurable TLS termination (`broker.tls.enabled`)
+- Custom certificate and key configuration
+- Cipher suite and protocol customization
+- Automatic HTTP to HTTPS redirection
+
+### SHIELD Integration
+Optional backup integration with SHIELD:
+- Automated backup scheduling for service instances
+- Configurable retention policies
+- Multi-target backup support for different service types
 
 ## Management Web UI
 
@@ -142,9 +207,7 @@ Defaults to `blacksmith`, but you probably ought to change that.
 
 ### broker.port: 3000
 
-The port to bind on and listen for HTTP traffic.  Defaults to
-3000.  Note that this BOSH release does not currently support TLS,
-so setting the port to 443 is probably a bad idea.
+The port to bind on and listen for HTTP traffic.  Defaults to 3000.
 
 ### bosh.address: _https://x.x.x.x:25555_
 
@@ -167,6 +230,42 @@ The password of an account on the BOSH director (user, not UAA
 client) that Blacksmith will use to perform service deployments.
 
 Defaults to `admin`, which hopefully doesn't work.
+
+### broker.tls.enabled: (true|false)
+
+Enable TLS termination for the Blacksmith broker. When enabled, 
+the broker will serve HTTPS traffic and redirect HTTP requests
+to HTTPS.
+
+Defaults to `false`.
+
+### broker.tls.port: 443
+
+The port to bind on for HTTPS traffic when TLS is enabled.
+
+Defaults to `443`.
+
+### broker.tls.certificate: _PEM encoded certificate_
+
+The TLS certificate to use for HTTPS connections. Required when
+`broker.tls.enabled` is `true`.
+
+### broker.tls.key: _PEM encoded private key_
+
+The TLS private key to use for HTTPS connections. Required when
+`broker.tls.enabled` is `true`.
+
+### limits.memory.blacksmith: _memory limit_
+
+Memory limit for the Blacksmith broker process when using BPM.
+
+Defaults to `2G`.
+
+### limits.memory.vault: _memory limit_
+
+Memory limit for the Vault process when using BPM.
+
+Defaults to `1G`.
 
 ### bosh.skip_ssl_validation: (true|false)
 
@@ -261,13 +360,50 @@ the release from the given URL, so if you are behind a proxy,
 that BOSH director will need its proxy environment variables
 (`http_proxy` and friends) configured properly.
 
+### SHIELD Integration Properties
+
+The following properties configure optional SHIELD backup integration:
+
+### shield.enabled: (true|false)
+
+Enables SHIELD backup management for Blacksmith-deployed services.
+
+Defaults to `false`.
+
+### shield.address: _https://x.x.x.x:443_
+
+The full URL of the SHIELD core, including protocol and port.
+
+### shield.agent: _x.x.x.x:5444_
+
+The SHIELD agent endpoint, typically the same IP as the core
+with port 5444.
+
+### shield.auth_method: (local|token)
+
+Authentication method for connecting to SHIELD.
+
+Defaults to `token`.
+
+### shield.tenant: _tenant-uuid_
+
+The SHIELD tenant UUID where backup jobs and targets will be
+scheduled.
+
+### shield.store: _store-uuid_
+
+The SHIELD store UUID where backup archives will be stored.
+
+### shield.enabled_on_targets: _[list]_
+
+List of target types that should be backed up via SHIELD.
+
+Defaults to `[rabbitmq]`.
+
 ## Contributing
 
 If you find a bug, please raise a [Github Issue][1] first,
 before submitting a PR.
-
-
-
 
 [1]: https://github.com/cloudfoundry-community/blacksmith-boshrelease/issues
 
