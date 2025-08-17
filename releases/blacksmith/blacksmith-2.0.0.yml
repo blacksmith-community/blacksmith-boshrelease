@@ -1,12 +1,12 @@
 name: blacksmith
 version: 2.0.0
-commit_hash: 2092d9e
-uncommitted_changes: false
+commit_hash: 3521e1c
+uncommitted_changes: true
 jobs:
 - name: blacksmith
-  version: 4d8f4bea79fce6dcb3b87818d602c1cb19730995db42073923a78fb22fe07f72
-  fingerprint: 4d8f4bea79fce6dcb3b87818d602c1cb19730995db42073923a78fb22fe07f72
-  sha1: sha256:3d1f24f226927b79aa3578d6656b249fcc0ecc5e93fb272bbb2c2e502c96f306
+  version: 06a2de8ec46f7b947447c3510a82c5654a594d88f4b5280637425745d39123e5
+  fingerprint: 06a2de8ec46f7b947447c3510a82c5654a594d88f4b5280637425745d39123e5
+  sha1: sha256:8879e736adc6beea71e2be48b023f333092644d823ae241314500ec92820e851
   packages:
   - blacksmith
   - safe
@@ -18,19 +18,19 @@ jobs:
   packages: []
 packages:
 - name: blacksmith
-  version: 0bf6ba2b4582677e54e3314abb5ee0f7af59d9b6ac512ee758daae8d8442aed7
-  fingerprint: 0bf6ba2b4582677e54e3314abb5ee0f7af59d9b6ac512ee758daae8d8442aed7
-  sha1: sha256:8ecda3a393b962844271cf6913f9449b1d100f60a3f81c869fb2b5ebb7230f9f
+  version: e9421162a694d8581c6e039b2cf6afe0001143f152aa926e318dd2faab45e010
+  fingerprint: e9421162a694d8581c6e039b2cf6afe0001143f152aa926e318dd2faab45e010
+  sha1: sha256:a3450b0953be24a4242eebd81a534165ae51c69bf4178a005919a5d2b8cc89ad
   dependencies: []
 - name: safe
   version: a94d3661e8a7747c25010253587ad057aa073eb758a5ba0a2667f30c91d7f737
   fingerprint: a94d3661e8a7747c25010253587ad057aa073eb758a5ba0a2667f30c91d7f737
-  sha1: sha256:23a3017cf0d00e6426ea75ebb0720495691f48f0db818b2b080f012dddfcc01a
+  sha1: sha256:ab248e2e39f764277fabe54cad2b9456c121ee67b4f1a0258eb967eafd964f4f
   dependencies: []
 - name: vault
   version: 2ef16d10601962b5c0188ee7f06852ad003a568a88388c2656cb28db39a0daed
   fingerprint: 2ef16d10601962b5c0188ee7f06852ad003a568a88388c2656cb28db39a0daed
-  sha1: sha256:cdcc076ca13f739c16d5cfc0907efe47df1ccce8ef18302b911eb13973ed9c0c
+  sha1: sha256:f6fd1e6bc8164abaaa4ed9c15911695a4c29ed80cbb11b114bc8a5044017e038
   dependencies: []
 license:
   version: f7a524643770078881bdfa03661a6aa2dec6f55e7628ac9dc450e12b933c3e19
