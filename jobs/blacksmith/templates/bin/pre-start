@@ -1,24 +1,41 @@
 #!/bin/bash
+# BPM pre-start script for blacksmith job
+
 set -eu
 
-# BPM pre-start script for blacksmith job
 JOB_NAME='<%= name %>'
 
-echo "Pre-start: Setting up directories and permissions..."
+echo "pre-start: Setting up directories and permissions..."
 
 export STORE_DIR="/var/vcap/store/$JOB_NAME"
 mkdir -p "${STORE_DIR}"
 chown vcap:vcap "${STORE_DIR}"
 chmod 775 "${STORE_DIR}"
 
-echo "Setting up .vault directory for storage of seal key / root token"
+echo "pre-start: Setting up .vault directory for storage of seal key / root token"
 mkdir -p "${STORE_DIR}/.vault"
 
-echo "Finding all \`configure-blacksmith\` jobs scripts and running them"
+echo "pre-start: Finding all \`configure-blacksmith\` jobs scripts and running them"
 shopt -s nullglob
 for configure_script in /var/vcap/jobs/*/bin/configure-blacksmith; do
-  echo "Pre-start: Executing Blacksmith configure script ${configure_script}..."
+  echo "pre-start: Executing Blacksmith configure script ${configure_script}..."
   ${configure_script}
 done
 
-echo "Pre-start: Setup completed successfully."
+echo "pre-start: Setting up data and store directory permissions for blacksmith..."
+export DATA_DIR="/var/vcap/data/$JOB_NAME"
+for dir in "${DATA_DIR}" "${STORE_DIR}"; do
+  if [[ -d "${dir}" ]]; then
+    echo "pre-start: ${dir}..."
+    find "${dir}" -type f -name "init" -exec chown root:root {} \;
+    find "${dir}" -type f -name "init" -exec chmod 755 {} \;
+    find "${dir}" -type d -exec chmod 755 {} \;
+  fi
+done
+
+#sysctl -e -w net.ipv4.tcp_fin_timeout 10
+#sysctl -e -w net.ipv4.tcp_tw_reuse 1
+
+echo "pre-start: Setup completed successfully."
+
+exit 0

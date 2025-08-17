@@ -33,10 +33,16 @@ processes:
     privileged: true
     host_pid_namespace: true
     unrestricted_volumes:
-    - path: /var/vcap/instance
-      writable: false
-    - path: /root
-      writable: true
+      - path: /var/vcap/instance
+        writable: false
+      - path: /var/vcap/data/blacksmith
+        allow_executions: true
+        writable: true
+      - path: /root
+        writable: true
+      - path: /var/vcap/jobs/*-blacksmith-plans
+        allow_executions: true
+        writable: true
   capabilities:
   - NET_BIND_SERVICE
   env:

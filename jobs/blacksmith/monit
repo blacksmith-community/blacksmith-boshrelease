@@ -5,7 +5,7 @@ check process blacksmith
   group vcap
 
 check process vault
-  with pidfile /var/vcap/sys/run/bpm/vault/vault.pid
+  with pidfile /var/vcap/sys/run/bpm/blacksmith/vault.pid
   start program "/var/vcap/jobs/bpm/bin/bpm start blacksmith -p vault"
   stop program "/var/vcap/jobs/bpm/bin/bpm stop blacksmith -p vault"
   group vcap
