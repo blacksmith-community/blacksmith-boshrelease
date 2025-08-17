@@ -35,10 +35,12 @@ processes:
     unrestricted_volumes:
     - path: /var/vcap/instance
       writable: false
+    - path: /root
+      writable: true
   capabilities:
   - NET_BIND_SERVICE
   env:
 <% if p('debug') -%>
-BLACKSMITH_DEBUG: "1"
+    BLACKSMITH_DEBUG: "1"
 <% end -%>
-  BLACKSMITH_OPER_HOME: /root
+    BLACKSMITH_OPER_HOME: /root
