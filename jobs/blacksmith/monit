@@ -1,1 +1,11 @@
-# Blacksmith BOSH Release uses BPM
+check process blacksmith
+  with pidfile /var/vcap/sys/run/bpm/blacksmith/blacksmith.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start blacksmith -p blacksmith"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop blacksmith -p blacksmith"
+  group vcap
+
+check process vault
+  with pidfile /var/vcap/sys/run/bpm/vault/vault.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start blacksmith -p vault"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop blacksmith -p vault"
+  group vcap
