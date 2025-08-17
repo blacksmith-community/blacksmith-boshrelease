@@ -30,6 +30,10 @@ properties:
     description: "Enable flag to tell Cloud Foundry user can share services between orgs and spaces"
     default: false
 
+  services.skip_tls_verify:
+    description: "List of service types for which TLS certificate verification should be skipped when Blacksmith connects to service APIs. This is useful when services are deployed with self-signed certificates or certificates that don't include proper IP Subject Alternative Names (SANs). Supported values: service names like 'rabbitmq', 'redis', 'postgres', etc., or 'all' to skip TLS verification for all services. Security Warning: Only use this setting in development environments or when you understand the security implications."
+    default: []
+
   broker.port:
     description: "port to run blacksmith"
     default: 3000
