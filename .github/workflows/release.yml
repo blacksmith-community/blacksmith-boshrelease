@@ -28,7 +28,9 @@ jobs:
 
     - name: Setup BOSH CLI
       run: |
-        curl -Lo bosh https://github.com/cloudfoundry/bosh-cli/releases/latest/download/bosh-cli-7.8.1-linux-amd64
+        # Get the latest BOSH CLI version dynamically
+        BOSH_VERSION=$(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+        curl -Lo bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64
         chmod +x bosh
         sudo mv bosh /usr/local/bin/
         bosh --version
