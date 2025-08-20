@@ -22,3 +22,5 @@ my*.yml
 /src/blacksmith/bin
 /src/blacksmith/pkg
 *.tgz
+*.bz2
+*.sha256
