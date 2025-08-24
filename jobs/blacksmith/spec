@@ -64,6 +64,16 @@ properties:
     description: "Which SSL/TLS protocols to allow, used for the HTTPS API and Web UI"
     default: "TLSv1.2 TLSv1.3"
 
+  broker.cf.apis:
+    description: "Cloud Foundry API endpoints for broker integration. Each entry should have 'name', 'endpoint', 'username', and 'password' fields."
+    default: {}
+    example:
+      fivetwenty:
+        name: "ocfp-aws-dev-ocf-us-east-1-cf"
+        endpoint: "https://api.system.ocfp.example.com"
+        username: "blacksmith"
+        password: "aiKe7d2cSFjY2LyibmAMQn90K0SpUX"
+
   shield.enabled:
     description: "Enable SHIELD backups managed by Blacksmith"
     default: false
