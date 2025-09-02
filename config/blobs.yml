@@ -1,7 +1,7 @@
-blacksmith/blacksmith-1.0.10.tar.bz2:
-  size: 37255041
-  object_id: 88d1ae5c-0ccc-46f7-7ed8-d49e69f2f137
-  sha: sha256:3a1f554577f432b5d437c7643f26c017c6156c335ade005810a538b3f779e639
+blacksmith/blacksmith-1.0.11.tar.bz2:
+  size: 37267415
+  object_id: 2409c08f-4646-46bd-7453-d07a87953b35
+  sha: sha256:bb6af1bbc1c0c288a5fce46030d46ba9790add741aebdb3b4506940d15bb00dc
 safe/safe-1.9.0-linux-amd64:
   size: 10378351
   object_id: edfc745c-25cc-4917-5d56-dd01c7ed8777

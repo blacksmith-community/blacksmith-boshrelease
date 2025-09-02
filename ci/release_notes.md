@@ -1,39 +1,23 @@
-# Blacksmith v2.0.10
+# Blacksmith v2.0.11
 
-This release updates the Blacksmith broker to version 1.0.10, bringing UI bug fixes, improvements to WebSocket infrastructure, API performance, and UI enhancements.
+This release updates the Blacksmith broker to version 1.0.11, bringing enhanced UI configuration options and improved operational resilience.
 
 ## Component Updates
 
-- **Blacksmith** updated from v1.0.9 to v1.0.10
+- **Blacksmith** updated from v1.0.10 to v1.0.11
 
-## Upstream Changes (Blacksmith v1.0.10)
+## Upstream Changes (Blacksmith v1.0.11)
 
 ### New Features
 
-- **WebSocket Infrastructure Upgrade**: Migrated from gorilla/websocket to nhooyr.io/websocket for improved connection management and reliability
-- **API Compression**: Added gzip compression for API responses, reducing payload sizes and improving performance
-- **Query Parameter Support**: Implemented query parameter support for SSH instance selection, enabling more flexible instance targeting
-- **UI Modernization**: Integrated Tailwind CSS framework and enhanced JavaScript functionality for a better user experience
-
-### Performance Improvements
-
-- **Optimized API Responses**: Filtered large fields from API responses to improve UI rendering performance
-- **Enhanced WebSocket Message Handling**: Improved message processing efficiency for real-time communications
-- **Better Connection Management**: Strengthened BOSH director connection handling with improved error recovery
-
-### Bug Fixes
-
-- Fixed Cloud Foundry service name handling to ensure proper service instance identification
-- Resolved UI display issues with service instance information
-- Corrected SSH streaming connection timeout problems that could cause dropped connections
-- Improved error recovery in reconciler operations for better system resilience
+- **UI SSH Enable/Disable Configuration**: Added new UI configuration option to enable or disable SSH functionality, providing better control over access methods
+- **Graceful Degradation**: Implemented graceful degradation of functionality when services are unavailable or unconfigured, improving system stability and user experience
 
 ### Technical Improvements
 
-- Reduced overall API response sizes for faster data transfer
-- Enhanced CSS styling for improved visual consistency
-- Strengthened error handling throughout the codebase
-- Improved connection reliability for SSH streaming sessions
+- **Enhanced Configuration Management**: Improved handling of missing or misconfigured components to prevent service disruption
+- **Better Error Handling**: Enhanced error recovery mechanisms when dependent services are unavailable
+- **Operational Reliability**: Strengthened service resilience to handle partial system failures gracefully
 
 ## Deploying
 
@@ -42,8 +26,8 @@ To use this BOSH release, include the following in your BOSH deployment manifest
 ```yaml
 releases:
 - name:    blacksmith
-  version: 2.0.10
-  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v2.0.10/blacksmith-2.0.10.tgz
+  version: 2.0.11
+  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v2.0.11/blacksmith-2.0.11.tgz
   sha1:    sha256:PENDING
 ```
 
@@ -51,7 +35,7 @@ releases:
 
 ## Upgrade Notes
 
-This release is fully backward compatible with v2.0.9. No configuration changes are required when upgrading. The WebSocket infrastructure changes and API improvements will take effect immediately upon deployment.
+This release is fully backward compatible with v2.0.10. No configuration changes are required when upgrading. The new SSH configuration option and graceful degradation features will take effect immediately upon deployment.
 
 ## Known Issues
 
