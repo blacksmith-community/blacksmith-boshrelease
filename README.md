@@ -233,7 +233,7 @@ Defaults to `admin`, which hopefully doesn't work.
 
 ### broker.tls.enabled: (true|false)
 
-Enable TLS termination for the Blacksmith broker. When enabled, 
+Enable TLS termination for the Blacksmith broker. When enabled,
 the broker will serve HTTPS traffic and redirect HTTP requests
 to HTTPS.
 
@@ -412,3 +412,4 @@ before submitting a PR.
 [rabbitmq-forge]:   https://github.com/blacksmith-community/rabbitmq-forge-boshrelease
 
 [github]: https://github.com/blacksmith-community
+
