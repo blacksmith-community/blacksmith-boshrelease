@@ -39,7 +39,5 @@ cat > $PLANROOT/params.yml <<EOF
 meta:
   size: <%= plan["vm_type"] || 'default' %>
 EOF
-
-
-
 <% end %>
+

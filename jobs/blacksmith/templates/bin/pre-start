@@ -5,28 +5,34 @@ set -eu
 
 JOB_NAME='<%= name %>'
 
-echo "pre-start: Setting up directories and permissions..."
+log() {
+  local level="$1" msg="$2"
+  shift 2
+  echo -e "$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ") $level [pre-start] $msg"
+}
+
+log info "Setting up directories and permissions..."
 
 export STORE_DIR="/var/vcap/store/$JOB_NAME"
 mkdir -p "${STORE_DIR}"
 chown vcap:vcap "${STORE_DIR}"
 chmod 775 "${STORE_DIR}"
 
-echo "pre-start: Setting up .vault directory for storage of seal key / root token"
+log info "Setting up .vault directory for storage of seal key / root token"
 mkdir -p "${STORE_DIR}/.vault"
 
-echo "pre-start: Finding all \`configure-blacksmith\` jobs scripts and running them"
+log info "Finding all \`configure-blacksmith\` jobs scripts and running them"
 shopt -s nullglob
 for configure_script in /var/vcap/jobs/*/bin/configure-blacksmith; do
-  echo "pre-start: Executing Blacksmith configure script ${configure_script}..."
+  log info "Executing Blacksmith configure script ${configure_script}..."
   ${configure_script}
 done
 
-echo "pre-start: Setting up data and store directory permissions for blacksmith..."
+log info "Setting up data and store directory permissions for blacksmith..."
 export DATA_DIR="/var/vcap/data/$JOB_NAME"
 for dir in "${DATA_DIR}" "${STORE_DIR}"; do
   if [[ -d "${dir}" ]]; then
-    echo "pre-start: ${dir}..."
+    log info "${dir}..."
     find "${dir}" -type f -name "init" -exec chown root:root {} \;
     find "${dir}" -type f -name "init" -exec chmod 755 {} \;
     find "${dir}" -type d -exec chmod 755 {} \;
@@ -36,6 +42,6 @@ done
 #sysctl -e -w net.ipv4.tcp_fin_timeout 10
 #sysctl -e -w net.ipv4.tcp_tw_reuse 1
 
-echo "pre-start: Setup completed successfully."
+log info "Setup completed successfully."
 
 exit 0
