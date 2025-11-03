@@ -350,9 +350,9 @@ properties:
   bosh:
     releases:
       - name: redis-forge
-        version: 0.1.0
-        url: https://github.com/blacksmith-community/redis-forge-boshrelease/releases/download/v0.1.0/redis-forge-0.1.0.tgz
-        sha1: 5db2a26bc750d9475062833498a022eb1a954cf2
+        version: 1.4.0
+        url: https://github.com/blacksmith-community/redis-forge-boshrelease/releases/download/v1.4.0/redis-forge-1.4.0.tgz
+        sha1: sha256:480c94ba6a7743c9796913d74425cb95d5cdfa685abbff73cd0beea71ff6d535
 ```
 
 Blacksmith instructs the BOSH director to perform the download of

@@ -1,35 +1,13 @@
-# Blacksmith v2.0.13
+# Blacksmith v2.0.14
 
-This release updates the Blacksmith broker to version 1.0.13, introducing powerful Vault Auto-Unseal capabilities, enhanced reconciler functionality, and significant code quality improvements for increased operational reliability.
+This release updates the Redis Forge documentation to reference version 1.4.0, which includes important security updates and Redis version improvements.
 
-## Component Updates
+## Documentation Updates
 
-- **Blacksmith** updated from v1.0.12 to v1.0.13
-
-## Upstream Changes (Blacksmith v1.0.13)
-
-### New Features
-
-- **Vault Auto-Unseal Support**: Revolutionary new automatic Vault unsealing functionality with configurable health monitoring and intelligent retry logic, eliminating manual intervention for Vault restarts
-- **Enhanced Reconciler Functionality**: Advanced broker-based binding reconstruction with Cloud Foundry service discovery integration, preserving existing instance names during reconciliation operations
-- **Improved Vault Integration**: Smart Vault health monitoring with configurable check intervals and graceful degradation modes for enhanced system resilience
-
-### Technical Improvements
-
-- **Configuration Standardization**: All configuration keys have been standardized to lowercase format for consistency and improved maintainability
-- **Code Quality Excellence**: Passed comprehensive `golangci-lint` checks across the entire codebase, ensuring adherence to Go best practices and eliminating potential issues
-- **Race Condition Prevention**: Added comprehensive race condition testing and safeguards to prevent concurrency-related issues in high-load environments
-- **Operational Reliability**: Enhanced error handling and retry mechanisms throughout the system for improved stability under adverse conditions
-
-### Development & Testing Enhancements
-
-- **Enhanced Test Coverage**: Expanded test suite with race condition detection and improved validation scenarios
-- **Development Tooling**: Improved development environment setup and debugging capabilities
-- **Code Maintainability**: Refactored codebase following Go best practices with improved documentation and error handling
-
-### Breaking Changes
-
-- **Configuration Format**: Configuration keys have been changed to lowercase format. Existing deployments will need configuration updates during upgrade (see Upgrade Notes below)
+- **Redis Forge Example**: Updated README.md documentation to reference redis-forge v1.4.0
+  - Redis 6 upgraded to version 6.2.20
+  - Redis 7 updated to version 7.2.11
+  - Includes patches addressing CVE vulnerabilities in both Redis versions
 
 ## Deploying
 
@@ -38,34 +16,32 @@ To use this BOSH release, include the following in your BOSH deployment manifest
 ```yaml
 releases:
 - name:    blacksmith
-  version: 2.0.13
-  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v2.0.13/blacksmith-2.0.13.tgz
+  version: 2.0.14
+  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v2.0.14/blacksmith-2.0.14.tgz
   sha1:    sha256:PENDING
 ```
 
 **Note**: The SHA256 checksum will be added once the release tarball is created.
 
+## Redis Forge Configuration
+
+For those deploying Redis services with Blacksmith, the recommended Redis Forge release is now v1.4.0:
+
+```yaml
+properties:
+  bosh:
+    releases:
+      - name: redis-forge
+        version: 1.4.0
+        url: https://github.com/blacksmith-community/redis-forge-boshrelease/releases/download/v1.4.0/redis-forge-1.4.0.tgz
+        sha1: sha256:480c94ba6a7743c9796913d74425cb95d5cdfa685abbff73cd0beea71ff6d535
+```
+
 ## Upgrade Notes
 
-**IMPORTANT**: This release contains breaking changes in configuration format.
+This is a documentation-only release with no functional changes to the Blacksmith broker itself. Existing deployments can continue running without modification.
 
-### Required Actions Before Upgrade
-
-1. **Update Configuration Keys**: Convert all configuration keys to lowercase format in your deployment manifests
-2. **Review Vault Auto-Unseal Settings**: Configure new auto-unseal parameters if you want to enable this feature
-3. **Configure Health Check Intervals**: Review and set appropriate health check intervals for your environment
-4. **Test Vault Restart Scenarios**: Validate that your Vault configuration works correctly with the new auto-unseal functionality
-
-### Migration Steps
-
-1. Update your deployment manifest configuration keys from uppercase/camelCase to lowercase
-2. Deploy the new release
-3. Monitor logs for any configuration warnings or errors
-4. Test Vault operations to ensure proper functionality
-
-### Backward Compatibility
-
-While the core functionality remains backward compatible, the configuration format changes require manifest updates. The new auto-unseal and enhanced reconciler features are optional and can be enabled incrementally.
+If you are using Redis Forge, consider upgrading to v1.4.0 to benefit from the latest Redis security patches and version updates.
 
 ## Known Issues
 
