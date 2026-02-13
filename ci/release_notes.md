@@ -50,3 +50,7 @@ None at this time.
 ## Contributing
 
 If you encounter any issues or have suggestions for improvements, please open an issue on the [Blacksmith BOSH Release GitHub repository](https://github.com/blacksmith-community/blacksmith-boshrelease).
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.1.0
