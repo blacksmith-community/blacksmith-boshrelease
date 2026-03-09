@@ -54,3 +54,7 @@ If you encounter any issues or have suggestions for improvements, please open an
 # Blacksmith
 
 - Bumped Blacksmith to v1.1.0
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.2.0
