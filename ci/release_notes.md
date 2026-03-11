@@ -37,3 +37,7 @@ This release includes thread safety improvements and a new feature for dynamic
 network selection. Existing deployments should upgrade to benefit from the data
 race fixes. No configuration changes are required — the new network selection
 is automatic with `BOSH_NETWORK` as the fallback.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.2.1
