@@ -26,3 +26,7 @@ releases:
 This is a performance patch with no configuration changes required.
 Existing deployments benefit from reduced BOSH Director API calls during
 service binding operations.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.3.0
