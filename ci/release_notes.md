@@ -36,3 +36,7 @@ require the matching forge-side plumbing.
 No breaking changes for existing non-Valkey deployments; new broker
 properties for reconciler/Vault retention fall back to sensible defaults
 when unset.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.4.0
