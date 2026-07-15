@@ -1,42 +1,19 @@
-# Blacksmith BOSH Release v2.2.0
+# Blacksmith BOSH Release v2.3.0
 
-Bumps the Blacksmith service broker to v1.3.0.
+Security-focused release: bumps the Blacksmith service broker to v1.4.0 and swaps the bundled Vault binary from 1.14.10 to 1.21.4.
 
-## What's New in Blacksmith v1.3.0
+## What's New in Blacksmith v1.4.0
 
-**Per-binding Valkey ACL** — Valkey service bindings now get their own
-ACL-isolated users scoped to per-binding credentials. Broker bind/unbind
-flows create and remove ACL users atomically with the Vault credential
-lifecycle. Requires Valkey forge v1.1.0+ for the service-side plumbing.
+**Broker API library modernized (brokerapi v8 → v13)** — The broker moves from the end-of-life `pivotal-cf/brokerapi/v8` to the maintained `code.cloudfoundry.org/brokerapi/v13`. Service provisioning and binding behavior are unchanged; the one operator-visible effect is the broker's log output format (see Upgrade Notes).
 
-**Configurable reconciler and Vault retention** — The reconciler interval
-and Vault secret `max_versions` are now configurable via broker properties,
-letting operators tune garbage collection and credential retention without
-rebuilding.
+**Bundled Vault binary 1.14.10 → 1.21.4** — The embedded Vault server the broker uses for per-instance credential storage moves to 1.21.4, the terminal Vault 1.x Community Edition release, clearing the reachable Vault CVE set.
 
-**UI improvements** — Batch operation bulk selection for multi-instance
-workflows, and general layout polish.
-
-## Deploying
-
-```yaml
-releases:
-- name:    blacksmith
-  version: 2.2.0
-  url:     https://github.com/blacksmith-community/blacksmith-boshrelease/releases/download/v2.2.0/blacksmith-2.2.0.tgz
-  sha1:    sha256:PENDING
-```
+**Go dependency and toolchain refresh** — Rebuilt on Go 1.25.12 with refreshed security-sensitive dependencies (x/crypto, x/net, grpc, go-jose, circl, vault/api). The shipped broker binary scans clean for reachable vulnerabilities.
 
 ## Upgrade Notes
 
-This release introduces per-binding Valkey ACL support. If you have the
-Valkey forge deployed, bump it to v1.1.0 or later — the ACL features
-require the matching forge-side plumbing.
+**Log format change (the one operator-visible change)** — Broker-library log lines now emit standard-library structured JSON (`slog`) instead of Lager-format JSON. If you ship or alert on broker logs by parsing Lager fields (`source`, `message`, `data`), re-key those rules to the `slog` JSON shape before or alongside the upgrade. Provisioning, binding, and credential behavior are otherwise unchanged.
 
-No breaking changes for existing non-Valkey deployments; new broker
-properties for reconciler/Vault retention fall back to sensible defaults
-when unset.
+**Ephemeral disk during the swap** — The 1.21.4 Vault binary is larger than 1.14.10; the broker VM needs enough `/var/vcap/data` to extract the new package alongside the old one during the upgrade. Ensure the broker instance group has an adequately sized ephemeral disk.
 
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.0
+No configuration changes are required, and there are no changes to service provisioning, binding, or credential formats.
