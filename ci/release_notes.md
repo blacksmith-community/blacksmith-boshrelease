@@ -17,3 +17,7 @@ Security-focused release: bumps the Blacksmith service broker to v1.4.0 and swap
 **Ephemeral disk during the swap** — The 1.21.4 Vault binary is larger than 1.14.10; the broker VM needs enough `/var/vcap/data` to extract the new package alongside the old one during the upgrade. Ensure the broker instance group has an adequately sized ephemeral disk.
 
 No configuration changes are required, and there are no changes to service provisioning, binding, or credential formats.
+
+# Safe
+
+- Bumped Safe to v1.10.0

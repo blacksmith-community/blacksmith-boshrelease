@@ -2,10 +2,10 @@ blacksmith/blacksmith-1.4.0.tar.bz2:
   size: 40634633
   object_id: 159c091a-968a-411b-5f23-5e778d0e229e
   sha: sha256:68c60c241017aa5b76ff4ee317d7a2e9e5f910c40377df57ccb130bbf4a6e119
-safe/safe-1.9.0-linux-amd64:
-  size: 10378351
-  object_id: edfc745c-25cc-4917-5d56-dd01c7ed8777
-  sha: sha256:c8cd4e7fbdfad5155eff8b13ea0035922c7fd2aa74a0bedfbbba0aa3ab60e3da
+safe/safe-1.10.0-linux-amd64:
+  size: 13370075
+  object_id: 328e88c3-bdfe-4ea6-7ea5-d40341d9ada3
+  sha: sha256:692e51c1d47883c5028bd4a27f34298758c45aa62275984a797ecba0ef49ff3a
 vault/vault_1.21.4_linux_amd64.zip:
   size: 168607711
   object_id: 89e5c4dd-cb68-4bab-78e9-0e91964322a2
