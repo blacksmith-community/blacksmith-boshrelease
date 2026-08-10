@@ -98,7 +98,10 @@ jobs:
         git add releases/$RELEASE_NAME/$RELEASE_NAME-${{ steps.version.outputs.version }}.yml
         git add releases/$RELEASE_NAME/index.yml
         git commit -m "release v${{ steps.version.outputs.version }}" || echo "No changes to commit"
-        git push origin HEAD:master
+        # This is the 2.2.x maintenance branch. master has moved on to 2.3.x,
+        # so pushing the generated release files there is not a fast-forward
+        # and would abort the job before the GitHub release is created.
+        git push origin HEAD:release/2.2.x
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
