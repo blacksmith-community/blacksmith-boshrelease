@@ -29,3 +29,7 @@ No configuration changes are required, and there are no changes to service provi
 # Safe
 
 - Bumped Safe to v1.22.0
+
+# Safe
+
+- Bumped Safe to v1.23.0
