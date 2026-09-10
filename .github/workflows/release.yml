@@ -49,6 +49,33 @@ jobs:
             secret_access_key: ${AWS_SECRET_ACCESS_KEY}
         EOF
 
+    - name: Fetch and upload blobs missing from the blobstore
+      run: |
+        bosh -n sync-blobs
+        # A blob entry without an object_id was added locally and never
+        # uploaded. The blacksmith binary blob is fetched from the matching
+        # blacksmith GitHub release, checked against the recorded digest,
+        # and uploaded before the final release is built.
+        awk '/^[^ ].*:$/{name=$1; sub(/:$/,"",name)} /object_id:/{print name}' config/blobs.yml > /tmp/uploaded-blobs
+        awk '/^[^ ].*:$/{name=$1; sub(/:$/,"",name); print name}' config/blobs.yml | grep -vxFf /tmp/uploaded-blobs > /tmp/pending-blobs || true
+        while read -r blob; do
+          case "$blob" in
+            blacksmith/blacksmith-*.tar.bz2)
+              ver=$(basename "$blob" .tar.bz2); ver=${ver#blacksmith-}
+              mkdir -p "blobs/$(dirname "$blob")"
+              curl -sSLf -o "blobs/$blob" "https://github.com/blacksmith-community/blacksmith/releases/download/v${ver}/blacksmith-${ver}.tar.bz2"
+              want=$(awk -v b="$blob:" '$1==b{f=1} f&&/sha:/{sub(/.*sha256:/,""); print; exit}' config/blobs.yml)
+              have=$(sha256sum "blobs/$blob" | awk '{print $1}')
+              [[ "$want" == "$have" ]] || { echo "digest mismatch for $blob: want $want, have $have"; exit 1; }
+              ;;
+            *)
+              echo "no fetch rule for pending blob $blob"; exit 1
+              ;;
+          esac
+        done < /tmp/pending-blobs
+        if [[ -s /tmp/pending-blobs ]]; then
+          bosh -n upload-blobs
+        fi
     - name: Create BOSH release
       run: |
         bosh -n create-release --final --version "${{ steps.version.outputs.version }}"
@@ -97,6 +124,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git add releases/$RELEASE_NAME/$RELEASE_NAME-${{ steps.version.outputs.version }}.yml
         git add releases/$RELEASE_NAME/index.yml
+        git add config/blobs.yml
         git commit -m "release v${{ steps.version.outputs.version }}" || echo "No changes to commit"
         git push origin HEAD:master
 
