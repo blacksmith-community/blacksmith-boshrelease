@@ -115,4 +115,6 @@ builds:
     version: 1.6.9
   fa0ece87-3290-42e7-605a-db16ad64930a:
     version: 0.0.5
+  fe4816a5-cfc2-4e4b-4906-c5c8f4fd4f43:
+    version: 2.3.1
 format-version: "2"
