@@ -75,6 +75,12 @@ jobs:
         done < /tmp/pending-blobs
         if [[ -s /tmp/pending-blobs ]]; then
           bosh -n upload-blobs
+          # create-release --final refuses a dirty tree, so record the
+          # uploaded object ids before building.
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add config/blobs.yml
+          git commit -m "Record uploaded blobs for v${{ steps.version.outputs.version }}"
         fi
     - name: Create BOSH release
       run: |
