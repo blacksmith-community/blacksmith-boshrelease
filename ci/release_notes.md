@@ -47,3 +47,7 @@ No configuration changes are required, and there are no changes to service provi
 - Bumped Blacksmith to v1.4.3, which lets the broker trust a private CA when it talks to the Cloud Foundry API.
 - Added `broker.cf.ca_cert` and `broker.cf.skip_ssl_validation`. They are rendered into every `broker.cf.apis` entry as `cacert` and `skip_ssl_validation`, and an entry may set its own `ca_cert` or `skip_ssl_validation` to override them.
 - Removed `bosh.skip_ssl_validation`. The broker's BOSH client never read it, so a director with a private CA has always needed `bosh.ca_cert`.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.4.4
