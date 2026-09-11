@@ -51,3 +51,10 @@ No configuration changes are required, and there are no changes to service provi
 # Blacksmith
 
 - Bumped Blacksmith to v1.4.4, which fixes the deprovision-during-provision race: a deprovision is now rejected with a concurrency error while the instance's provision task is still running, only a director 404 counts as a missing deployment (an in-flight first deploy with an empty manifest no longer does), and the reconciler reports deployments that have neither an index entry nor a CF instance instead of adopting them, while sweeping index entries whose deployment the director confirms gone.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.4.5, which moves the broker from `code.cloudfoundry.org/brokerapi/v13` to `github.com/fivetwenty-io/osbapi/v2` and adds a tombstone sweep to the vault index reconciler.
+- The broker library change is not visible in service provisioning, binding, or credential formats, and the OSB endpoints, status codes, and error bodies are unchanged. The one thing operators will notice is that the structured `slog` JSON lines the previous library wrote for each broker request are gone, because the new library does not log on its own. Blacksmith still writes its own request and routing log lines, so alerting that keys on those lines keeps working, and anything that keyed on the library's `slog` lines should move to them.
+- Basic authentication on the `/v2` endpoints is enforced by Blacksmith's own front door exactly as before, and a request that omits `X-Broker-Api-Version` is still accepted, now with version 2.17 filled in.
+- The reconciler now sweeps deleted tombstones out of the vault index. A tombstone that names no deployment ages out on its own without a director call, and a tombstone that names a deployment is removed once the director confirms the deployment is gone and no task is running for it. The deprovision race guards from v2.3.6 are unchanged.
