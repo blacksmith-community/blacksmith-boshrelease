@@ -65,7 +65,7 @@ properties:
     default: "TLSv1.2 TLSv1.3"
 
   broker.cf.apis:
-    description: "Cloud Foundry API endpoints for broker integration. Each entry should have 'name', 'endpoint', 'username', and 'password' fields."
+    description: "Cloud Foundry API endpoints for broker integration. Each entry should have 'name', 'endpoint', 'username', and 'password' fields. An entry may also set 'ca_cert' (PEM encoded CA bundle that signs the CF API and UAA certificates) and 'skip_ssl_validation' to override broker.cf.ca_cert and broker.cf.skip_ssl_validation for that endpoint."
     default: {}
     example:
       fivetwenty:
@@ -73,6 +73,16 @@ properties:
         endpoint: "https://api.system.ocfp.example.com"
         username: "blacksmith"
         password: "aiKe7d2cSFjY2LyibmAMQn90K0SpUX"
+        ca_cert: |
+          -----BEGIN CERTIFICATE-----
+          ...
+          -----END CERTIFICATE-----
+  broker.cf.ca_cert:
+    description: "PEM encoded CA certificate(s) the broker uses to verify the Cloud Foundry API and UAA endpoints listed in broker.cf.apis. Required when the CF haproxy or router certificate is signed by a private CA. An entry in broker.cf.apis may override it with its own 'ca_cert'."
+    default: ""
+  broker.cf.skip_ssl_validation:
+    description: "Skip TLS certificate verification when the broker connects to the Cloud Foundry API endpoints listed in broker.cf.apis. For development only; prefer broker.cf.ca_cert. An entry in broker.cf.apis may override it with its own 'skip_ssl_validation'."
+    default: false
 
   shield.enabled:
     description: "Enable SHIELD backups managed by Blacksmith"

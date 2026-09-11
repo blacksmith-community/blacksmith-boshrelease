@@ -209,6 +209,31 @@ Defaults to `blacksmith`, but you probably ought to change that.
 
 The port to bind on and listen for HTTP traffic.  Defaults to 3000.
 
+### broker.cf.apis: _(hash of Cloud Foundry API endpoints)_
+
+The Cloud Foundry foundations the broker talks to for service
+instance reconciliation. Each entry needs a `name`, an `endpoint`
+URL, and the `username` and `password` of a CF admin. An entry may
+also carry its own `ca_cert` and `skip_ssl_validation`, which
+override the two properties below for that endpoint.
+
+### broker.cf.ca_cert: _PEM encoded CA certificate_
+
+The CA certificate the broker uses to verify the Cloud Foundry API
+and UAA endpoints. Set this when the CF haproxy or router
+certificate is signed by a private CA, such as the self-signed CA
+that cf-deployment generates for haproxy.
+
+Defaults to empty, which means only the system trust store is used.
+
+### broker.cf.skip_ssl_validation: (true|false)
+
+Whether to skip TLS certificate verification when the broker
+connects to the Cloud Foundry API. Use it for development only;
+`broker.cf.ca_cert` keeps verification on.
+
+Defaults to `false`.
+
 ### bosh.address: _https://x.x.x.x:25555_
 
 The full URL of the BOSH director that Blacksmith should use for
