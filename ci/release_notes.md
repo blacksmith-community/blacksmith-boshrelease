@@ -50,4 +50,4 @@ No configuration changes are required, and there are no changes to service provi
 
 # Blacksmith
 
-- Bumped Blacksmith to v1.4.4
+- Bumped Blacksmith to v1.4.4, which fixes the deprovision-during-provision race: a deprovision is now rejected with a concurrency error while the instance's provision task is still running, only a director 404 counts as a missing deployment (an in-flight first deploy with an empty manifest no longer does), and the reconciler reports deployments that have neither an index entry nor a CF instance instead of adopting them, while sweeping index entries whose deployment the director confirms gone.
