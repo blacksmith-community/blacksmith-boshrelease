@@ -267,18 +267,12 @@ Memory limit for the Vault process when using BPM.
 
 Defaults to `1G`.
 
-### bosh.skip_ssl_validation: (true|false)
+### bosh.ca_cert: _PEM encoded CA certificate_
 
-Whether or not to validate the TLS certificate presented by the
-BOSH director when communicating with it.  In dev, with
-self-signed certificates, this is usually permissible.  In
-production, you should be using real certificates.
-
-Note that recent vintages of the BOSH director use a self-issued
-CA to sign the certificate, which isn't too far off from a
-self-signed certificate.
-
-Defaults to `true`.
+The CA certificate that signs the BOSH director's TLS certificate.
+The broker's director client always verifies the director, so set
+this whenever the director uses a private or self-issued CA, which
+is the case for every director that generates its own certificates.
 
 ### bosh.cloud-config: _(a cloud-config YAML chunk)_
 

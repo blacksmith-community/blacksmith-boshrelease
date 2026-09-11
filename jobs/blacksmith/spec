@@ -114,9 +114,6 @@ properties:
   bosh.address:
     description: "address for bosh director"
     default: "https://192.168.50.4:25555"
-  bosh.skip_ssl_validation:
-    description: "skip ssl validation for bosh"
-    default: true
   bosh.cloud-config:
     description: "A complete cloud-config for your Blacksmith network"
   bosh.stemcells:
