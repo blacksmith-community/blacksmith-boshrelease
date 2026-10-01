@@ -65,3 +65,17 @@ No configuration changes are required, and there are no changes to service provi
 - Every failed attempt inside the ACL retry loop is logged at error level with the instance ID, the binding ID, the address, and the attempt number.
 - The broker library moves to osbapi v2.0.2. An error the library has no mapping for still returns a 500, but its description is now the error's own message, so `cf` shows the operator the cause. Every 5xx is logged with the operation, the request path, and the instance and binding IDs, through Blacksmith's own logger under the `osbapi` name. This brings back a broker-library log line for failed requests, which v1.4.5 had dropped.
 - Error text that reaches the platform never carries a binding password or the admin password. Valkey echoes part of a rejected ACL SETUSER back in its reply, and Blacksmith now redacts the password from that reply. The broker also refuses a `vault.address` that has credentials embedded in it.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.4.8, which fixes how the broker answers Cloud Foundry's last-operation polls. Until now the broker looked at the newest BOSH task on the deployment and treated anything that wasn't a delete as a provision. A finished `bosh ssh`, `restart`, `recreate`, or `cck` task could therefore make Cloud Foundry report a delete as succeeded while BOSH was still deleting the deployment. On the way, the broker also added the instance back to vm-monitor and could reschedule the SHIELD backup it had just removed.
+
+- The broker now returns operation data with every provision and deprovision, and it records the accepted operation in Vault before it answers. A delete finishes only when the delete task the broker started is done and the director confirms the deployment is gone, and it fails when that task fails. A create finishes only on its own deploy task, so a task someone runs by hand on the deployment can't finish it early or hide a failed deploy. Polling a delete never runs the steps that follow a create.
+
+- The broker names its own deploy and delete tasks from the deployment's BOSH events. It no longer takes the newest task, which could be a `bosh ssh` session or a vm-monitor vitals request that ran while the deploy or delete was in progress.
+
+- If the broker restarts in the middle of a create or delete, the next poll recovers the task from the deployment's events. If BOSH never started the task and nothing is running on the deployment, the poll answers failed and says the operation was interrupted, so the request can be retried instead of waiting out Cloud Controller's polling timeout.
+
+- A failed delete attempt that the broker is going to retry no longer reports the delete as failed. A repeated delete request for an instance whose delete is still running is accepted without starting a second delete. The broker removes an instance from its index only when the director confirms the deployment is gone, so a director error no longer counts as that confirmation. When a deploy fails, the broker still deletes the failed deployment, but now it does so in the background and only once.
+
+- Creates and deletes that an earlier release accepted and that are still running during the upgrade keep working, because the broker falls back to the state it recorded in Vault. No configuration changes are required.
