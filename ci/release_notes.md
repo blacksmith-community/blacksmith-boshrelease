@@ -89,3 +89,7 @@ No configuration changes are required, and there are no changes to service provi
 - The broker library moves to osbapi v2.0.3. It maps an unauthorized error to a 401, a quota error to a 422, an invalid-parameter error to a 400, and a binding conflict to a 409, so Cloud Foundry shows the operator a specific status instead of a generic 500.
 
 - No configuration changes are required.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.4.9
