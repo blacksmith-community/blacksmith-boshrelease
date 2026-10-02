@@ -79,3 +79,13 @@ No configuration changes are required, and there are no changes to service provi
 - A failed delete attempt that the broker is going to retry no longer reports the delete as failed. A repeated delete request for an instance whose delete is still running is accepted without starting a second delete. The broker removes an instance from its index only when the director confirms the deployment is gone, so a director error no longer counts as that confirmation. When a deploy fails, the broker still deletes the failed deployment, but now it does so in the background and only once.
 
 - Creates and deletes that an earlier release accepted and that are still running during the upgrade keep working, because the broker falls back to the state it recorded in Vault. No configuration changes are required.
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.4.9, which makes Valkey ACL operations fail at once, with an explanation, instead of retrying a request that can't succeed. A MISCONF reply, a WRONGPASS reply, a NOAUTH reply, or a NOPERM reply now ends the operation on the first attempt. Each failure message names the likely causes, such as a Valkey instance that can't write its persistence files, an admin password that no longer matches the one Valkey was started with, or an admin user that lacks permission to manage ACL users.
+
+- The broker log no longer carries credentials, manifest bodies, secret environment values, rabbitmqctl arguments, or credential query parameters. Failed init script output also has VAULT_TOKEN and BOSH_CLIENT_SECRET masked before it is logged or returned.
+
+- The broker library moves to osbapi v2.0.3. It maps an unauthorized error to a 401, a quota error to a 422, an invalid-parameter error to a 400, and a binding conflict to a 409, so Cloud Foundry shows the operator a specific status instead of a generic 500.
+
+- No configuration changes are required.
