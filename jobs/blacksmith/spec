@@ -138,6 +138,30 @@ properties:
   bosh.ca_cert:
     description: "The CA Certificate for BOSH_CA_CERT."
 
+  credhub.cleanup.enabled:
+    description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone."
+    default: false
+  credhub.cleanup.sweep:
+    description: "Controls the periodic sweep for older orphaned variables, and must be off, dry-run, or delete."
+    default: "off"
+  credhub.cleanup.protected_deployments:
+    description: "Deployment names whose CredHub variables are never deleted, in addition to this deployment, which is always protected."
+    default: []
+  credhub.url:
+    description: "The HTTPS URL of the director's CredHub, such as https://10.0.0.6:8844, and it is required when cleanup is enabled."
+  credhub.ca_cert:
+    description: "The PEM CA certificate, or the pinned server certificate, that signs the director's CredHub, and it is required when cleanup is enabled."
+  credhub.client_id:
+    description: "The UAA client ID that Blacksmith uses to reach the director's CredHub."
+    default: blacksmith_credhub
+  credhub.client_secret:
+    description: "The secret of a UAA client on the director's UAA with the credhub.read and credhub.write authorities, and it is required when cleanup is enabled."
+  credhub.director_name:
+    description: "The director name that prefixes every CredHub path, which must equal the name the director reports in its info, and it is required when cleanup is enabled."
+  credhub.uaa_url:
+    description: "Optional. The director's UAA URL, which defaults to the one in the director's info when empty."
+    default: ""
+
   blacksmith_services_ca.tls.ca_cert:
     description: PEM encoded CA certificate provided by blacksmith
 
