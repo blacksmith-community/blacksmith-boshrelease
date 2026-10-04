@@ -93,3 +93,21 @@ No configuration changes are required, and there are no changes to service provi
 # Blacksmith
 
 - Bumped Blacksmith to v1.4.9
+
+# Blacksmith
+
+- Bumped Blacksmith to v1.5.0, which can delete a deprovisioned service instance's variables from the director's CredHub. Today those variables stay behind after the deployment is deleted, and they pile up over time. With the feature on, the broker deletes them once the director confirms the deployment is gone.
+
+- We added nine job properties for this. The feature is off by default, and the only property that turns it on is `credhub.cleanup.enabled`. Leaving it off keeps the broker behaving exactly as v1.4.9 does.
+
+- When cleanup is enabled, four properties are required, and they are `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name`. The URL is the HTTPS address of the director's CredHub, such as `https://10.0.0.6:8844`. The CA certificate signs that CredHub, or is the pinned server certificate. The director name must equal the name the director reports in its info, because every CredHub path starts with it.
+
+- The client secret belongs to a UAA client on the director's UAA that holds the `credhub.read` and `credhub.write` authorities. The client ID defaults to `blacksmith_credhub`, and `credhub.client_id` changes it. If the director's UAA is not the one named in the director's info, `credhub.uaa_url` points the broker at the right one.
+
+- `credhub.cleanup.sweep` controls a periodic sweep for older orphaned variables. It defaults to `off`, and it accepts `dry-run`, which only logs what it would delete, and `delete`, which removes the variables. We suggest running `dry-run` first and reading the log before moving to `delete`.
+
+- `credhub.cleanup.protected_deployments` lists deployment names whose variables are never deleted. The broker's own deployment is always protected, so it does not need to appear in the list.
+
+- A deployment someone deletes by hand keeps its variables, because the broker only cleans up after a deprovision it handled.
+
+- Upgrading with the feature off needs no configuration changes.
