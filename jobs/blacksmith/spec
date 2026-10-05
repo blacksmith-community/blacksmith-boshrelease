@@ -136,7 +136,10 @@ properties:
     description: "Network name to be used for deploying services with bosh."
     default: blacksmith
   bosh.ca_cert:
-    description: "The CA Certificate for BOSH_CA_CERT."
+    description: "PEM-encoded CA certificate that signed the BOSH director's and its UAA's TLS certificates."
+  bosh.request_timeout:
+    description: "Seconds Blacksmith waits for any single BOSH director request before giving up. Long director tasks are not bounded by this; Blacksmith follows them by task ID."
+    default: 60
 
   credhub.cleanup.enabled:
     description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone."

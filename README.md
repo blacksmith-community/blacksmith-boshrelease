@@ -294,10 +294,21 @@ Defaults to `1G`.
 
 ### bosh.ca_cert: _PEM encoded CA certificate_
 
-The CA certificate that signs the BOSH director's TLS certificate.
-The broker's director client always verifies the director, so set
-this whenever the director uses a private or self-issued CA, which
-is the case for every director that generates its own certificates.
+The PEM-encoded CA certificate that signed the BOSH director's and
+its UAA's TLS certificates. The broker's director client always
+verifies the director, so set this whenever the director uses a
+private or self-issued CA, which is the case for every director
+that generates its own certificates.
+
+### bosh.request_timeout: _seconds_
+
+The number of seconds Blacksmith waits for any single BOSH director
+request before giving up. Long director tasks are not bounded by
+this, because Blacksmith follows them by task ID. The value must be
+a positive whole number of seconds, and the job fails to render
+otherwise.
+
+Defaults to `60`.
 
 ### bosh.cloud-config: _(a cloud-config YAML chunk)_
 

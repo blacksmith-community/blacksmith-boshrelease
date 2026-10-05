@@ -111,3 +111,7 @@ No configuration changes are required, and there are no changes to service provi
 - A deployment someone deletes by hand keeps its variables, because the broker only cleans up after a deprovision it handled.
 
 - Upgrading with the feature off needs no configuration changes.
+
+# Blacksmith
+
+- Added `bosh.request_timeout`, the seconds Blacksmith waits for any single BOSH director request, with a default of 60. Long director tasks are not bounded by it, because Blacksmith follows them by task ID. A value that is not a positive whole number now fails the job render with a message that names the property.

@@ -24,3 +24,7 @@ my*.yml
 *.tgz
 *.bz2
 *.sha256
+
+# bundler install paths
+/.bundle/
+/vendor/bundle/
