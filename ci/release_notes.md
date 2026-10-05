@@ -115,3 +115,5 @@ No configuration changes are required, and there are no changes to service provi
 # Blacksmith
 
 - Added `bosh.request_timeout`, the seconds Blacksmith waits for any single BOSH director request, with a default of 60. Long director tasks are not bounded by it, because Blacksmith follows them by task ID. A value that is not a positive whole number now fails the job render with a message that names the property.
+
+- The bosh `address`, `username`, and `password` in `blacksmith.conf` are now quoted, so a password containing `:` or `#`, or one made only of digits, reaches Blacksmith exactly as written.

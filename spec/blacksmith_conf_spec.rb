@@ -59,4 +59,33 @@ RSpec.describe 'blacksmith.conf' do
       end
     end
   end
+
+  describe 'bosh credentials' do
+    it 'keeps a password with a colon and a hash as one string' do
+      conf = render_conf_yaml('bosh' => { 'password' => 'a:b#c' })
+      expect(conf['bosh']['password']).to eq('a:b#c')
+    end
+
+    it 'keeps a numeric password a string' do
+      conf = render_conf_yaml('bosh' => { 'password' => 12345 })
+      expect(conf['bosh']['password']).to eq('12345')
+    end
+
+    it 'keeps a username and an address as strings' do
+      conf = render_conf_yaml('bosh' => { 'username' => 'ops: admin', 'address' => 'https://10.0.0.6:25555' })
+      expect(conf['bosh']).to include('username' => 'ops: admin', 'address' => 'https://10.0.0.6:25555')
+    end
+
+    {
+      'a colon-space followed by space-hash' => 'a: b #c',
+      'a double quote and a backslash' => '"pa\\ss" word',
+      'non-ASCII characters' => 'pässwörd',
+      'an empty string' => '',
+    }.each do |label, password|
+      it "round-trips a password with #{label} exactly" do
+        conf = YAML.safe_load(render_conf('bosh' => { 'password' => password }))
+        expect(conf['bosh']['password']).to eq(password)
+      end
+    end
+  end
 end
