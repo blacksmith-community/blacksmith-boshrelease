@@ -88,4 +88,76 @@ RSpec.describe 'blacksmith.conf' do
       end
     end
   end
+
+  describe 'quoting of the remaining credentials' do
+    awkward = {
+      'a colon-space followed by space-hash' => 'a: b #c',
+      'a double quote and a backslash' => '"pa\\ss" word',
+      'an empty string' => '',
+    }
+
+    shield = {
+      'enabled' => true,
+      'address' => 'https://shield.example.com',
+      'agent' => '10.0.0.9:5444',
+      'tenant' => 'default',
+      'store' => 'local',
+    }
+
+    awkward.each do |label, value|
+      it "round-trips a shield password with #{label}" do
+        conf = render_conf_yaml('shield' => shield.merge('auth_method' => 'local', 'username' => 'ops', 'password' => value))
+        expect(conf['shield']['password']).to eq(value)
+      end
+
+      it "round-trips a shield token with #{label}" do
+        conf = render_conf_yaml('shield' => shield.merge('auth_method' => 'token', 'token' => value))
+        expect(conf['shield']['token']).to eq(value)
+      end
+
+      it "round-trips a broker password with #{label}" do
+        conf = render_conf_yaml('broker' => { 'password' => value })
+        expect(conf['broker']['password']).to eq(value)
+      end
+
+      it "round-trips a bosh network name with #{label}" do
+        conf = render_conf_yaml('bosh' => { 'cloud-config' => 'networks: []', 'network' => value })
+        expect(conf['bosh']['network']).to eq(value)
+      end
+    end
+
+    it 'round-trips a cf name, username, and password with a double quote and a backslash' do
+      value = awkward['a double quote and a backslash']
+      apis = { 'one' => { 'name' => value, 'endpoint' => 'https://api.example.com', 'username' => value, 'password' => value } }
+      conf = render_conf_yaml('broker' => { 'cf' => { 'apis' => apis } })
+      expect(conf['broker']['cf']['apis']['one']).to include('name' => value, 'username' => value, 'password' => value)
+    end
+
+    it 'keeps a numeric shield token and a numeric broker password strings' do
+      conf = render_conf_yaml('broker' => { 'password' => 12345 },
+                              'shield' => shield.merge('auth_method' => 'token', 'token' => 98765))
+      expect(conf['broker']['password']).to eq('12345')
+      expect(conf['shield']['token']).to eq('98765')
+    end
+
+    it 'renders every cf api in a map with its own awkward credentials' do
+      apis = {
+        'a: b' => { 'name' => 'x"y', 'endpoint' => 'https://a.example.com', 'username' => 'u #1', 'password' => 'p\\q' },
+        'two' => { 'name' => 'two', 'endpoint' => 'https://b.example.com', 'username' => 'u2', 'password' => '"' },
+      }
+      conf = render_conf_yaml('broker' => { 'cf' => { 'apis' => apis } })
+      expect(conf['broker']['cf']['apis'].keys).to eq(['a: b', 'two'])
+      expect(conf['broker']['cf']['apis']['a: b']).to include('name' => 'x"y', 'username' => 'u #1', 'password' => 'p\\q')
+      expect(conf['broker']['cf']['apis']['two']['password']).to eq('"')
+    end
+
+    it 'keeps numbers and booleans as their own YAML types' do
+      conf = render_conf_yaml('broker' => { 'port' => 3100, 'tls' => { 'enabled' => true, 'port' => 8443, 'reuse-after' => 3 } },
+                              'shield' => shield.merge('auth_method' => 'token', 'token' => 't', 'skip_ssl_validation' => false))
+      expect(conf['broker']['port']).to eq(3100)
+      expect(conf['broker']['tls']).to include('enabled' => true, 'port' => 8443, 'reuse_after' => 3)
+      expect(conf['shield']['enabled']).to eq(true)
+      expect(conf['shield']['skip_ssl_validation']).to eq(false)
+    end
+  end
 end
