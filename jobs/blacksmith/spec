@@ -142,25 +142,29 @@ properties:
     default: 60
 
   credhub.cleanup.enabled:
-    description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone."
-    default: false
+    description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone. It defaults to true, but the broker only deletes anything once the four connection properties credhub.url, credhub.ca_cert, credhub.client_secret, and credhub.director_name are all set. With none of them set, the broker logs one warning at startup and deletes nothing."
+    default: true
   credhub.cleanup.sweep:
-    description: "Controls the periodic sweep for older orphaned variables, and can be off, dry-run, or delete. An unquoted off in a manifest is read by YAML as false, and the job renders that as off."
-    default: "off"
+    description: "Controls the periodic sweep for older orphaned variables, and can be off, dry-run, or delete. The default dry-run only logs what the sweep would delete. An unquoted off in a manifest is read by YAML as false, and the job renders that as off."
+    default: "dry-run"
   credhub.cleanup.protected_deployments:
     description: "Deployment names whose CredHub variables are never deleted, in addition to this deployment, which is always protected."
     default: []
   credhub.url:
-    description: "The HTTPS URL of the director's CredHub, such as https://10.0.0.6:8844, and it is required when cleanup is enabled."
+    description: "The HTTPS URL of the director's CredHub, such as https://10.0.0.6:8844. Set it together with credhub.ca_cert, credhub.client_secret, and credhub.director_name, because the four go together and the job fails to render when only some of them are set."
+    default: ""
   credhub.ca_cert:
-    description: "The PEM CA certificate, or the pinned server certificate, that signs the director's CredHub, and it is required when cleanup is enabled."
+    description: "The PEM CA certificate, or the pinned server certificate, that signs the director's CredHub. It is one of the four connection properties that go together with credhub.url, credhub.client_secret, and credhub.director_name."
+    default: ""
   credhub.client_id:
     description: "The UAA client ID that Blacksmith uses to reach the director's CredHub."
     default: blacksmith_credhub
   credhub.client_secret:
-    description: "The secret of a UAA client on the director's UAA with the credhub.read and credhub.write authorities, and it is required when cleanup is enabled."
+    description: "The secret of a UAA client on the director's UAA with the credhub.read and credhub.write authorities. It is one of the four connection properties that go together with credhub.url, credhub.ca_cert, and credhub.director_name."
+    default: ""
   credhub.director_name:
-    description: "The director name that prefixes every CredHub path, which must equal the name the director reports in its info, and it is required when cleanup is enabled."
+    description: "The director name that prefixes every CredHub path, which must equal the name the director reports in its info. It is one of the four connection properties that go together with credhub.url, credhub.ca_cert, and credhub.client_secret."
+    default: ""
   credhub.uaa_url:
     description: "Optional. The director's UAA URL, which defaults to the one in the director's info when empty."
     default: ""

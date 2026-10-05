@@ -160,4 +160,58 @@ RSpec.describe 'blacksmith.conf' do
       expect(conf['shield']['skip_ssl_validation']).to eq(false)
     end
   end
+
+  describe 'credhub cleanup' do
+    let(:connection) do
+      {
+        'url' => 'https://10.0.0.6:8844',
+        'ca_cert' => '-----BEGIN CERTIFICATE-----\nabc\n-----END CERTIFICATE-----',
+        'client_secret' => 's3cret',
+        'director_name' => 'my-director',
+      }
+    end
+
+    it 'renders cleanup on with a dry-run sweep and an empty connection when no credhub property is set' do
+      credhub = render_conf_yaml['credhub']
+      expect(credhub['cleanup']['enabled']).to eq(true)
+      expect(credhub['cleanup']['sweep']).to eq('dry-run')
+      expect(credhub).to include('url' => '', 'ca_cert' => '', 'client_secret' => '', 'director_name' => '')
+    end
+
+    it 'renders all four connection values when all four are set' do
+      credhub = render_conf_yaml('credhub' => connection)['credhub']
+      expect(credhub).to include(connection)
+      expect(credhub['cleanup']['enabled']).to eq(true)
+    end
+
+    it 'fails with two of the four set and names the other two' do
+      partial = connection.slice('url', 'ca_cert')
+      expect { render_conf('credhub' => partial) }
+        .to raise_error(RuntimeError, /credhub\.client_secret, credhub\.director_name/)
+    end
+
+    it 'does not name a property that is set when it fails' do
+      partial = connection.slice('url', 'ca_cert')
+      expect { render_conf('credhub' => partial) }
+        .to raise_error(RuntimeError) { |e| expect(e.message).not_to match(/credhub\.url|credhub\.ca_cert/) }
+    end
+
+    it 'renders a sweep of false as off' do
+      credhub = render_conf_yaml('credhub' => { 'cleanup' => { 'sweep' => false } })['credhub']
+      expect(credhub['cleanup']['sweep']).to eq('off')
+    end
+
+    it 'keeps the broker deployment first in the protected list' do
+      credhub = render_conf_yaml('credhub' => { 'cleanup' => { 'protected_deployments' => ['other-one'] } })['credhub']
+      expect(credhub['cleanup']['protected_deployments']).to eq(['my-deployment', 'other-one'])
+    end
+
+    it 'puts the job deployment name first in the protected list by default' do
+      expect(render_conf_yaml['credhub']['cleanup']['protected_deployments'].first).to eq('my-deployment')
+    end
+
+    it 'renders no credhub block when cleanup is disabled' do
+      expect(render_conf_yaml('credhub' => { 'cleanup' => { 'enabled' => false } })).not_to have_key('credhub')
+    end
+  end
 end

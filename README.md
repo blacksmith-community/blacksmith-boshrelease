@@ -310,6 +310,28 @@ otherwise.
 
 Defaults to `60`.
 
+### credhub.cleanup.enabled: (true|false)
+
+When Blacksmith deprovisions a service instance, the director's CredHub keeps that deployment's variables unless someone deletes them. CredHub cleanup removes them once the director confirms the deployment is gone, and it is now on by default.
+
+A broker with no CredHub connection logs one warning at startup and deletes nothing, so leaving the connection unset keeps the broker behaving as it did before. Set `credhub.cleanup.enabled` to `false` to turn the feature off completely.
+
+Defaults to `true`.
+
+### credhub.url, credhub.ca_cert, credhub.client_secret, credhub.director_name
+
+These four properties describe the connection to the director's CredHub, and they go together. Set all four to give the broker a working connection, or leave all four empty to run without cleanup. Setting only some of them fails the job render with a message that names the ones that are missing.
+
+The URL is the HTTPS address of the director's CredHub, such as `https://10.0.0.6:8844`. The CA certificate signs that CredHub, or is the pinned server certificate. The client secret belongs to a UAA client on the director's UAA that holds the `credhub.read` and `credhub.write` authorities. The director name must equal the name the director reports in its info, because every CredHub path starts with it.
+
+Each of the four defaults to an empty string. The related `credhub.client_id` defaults to `blacksmith_credhub`, and `credhub.uaa_url` is optional.
+
+### credhub.cleanup.sweep: (off|dry-run|delete)
+
+The periodic sweep looks for older orphaned variables that the per-deprovision cleanup missed. The default `dry-run` only logs what the sweep would delete, `delete` removes the variables, and `off` skips the sweep. We suggest reading a few dry-run passes in the log before moving to `delete`.
+
+Defaults to `dry-run`.
+
 ### bosh.cloud-config: _(a cloud-config YAML chunk)_
 
 This property lets you manage the cloud-config of the Blacksmith
