@@ -142,7 +142,7 @@ properties:
     description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone."
     default: false
   credhub.cleanup.sweep:
-    description: "Controls the periodic sweep for older orphaned variables, and must be off, dry-run, or delete."
+    description: "Controls the periodic sweep for older orphaned variables, and can be off, dry-run, or delete. An unquoted off in a manifest is read by YAML as false, and the job renders that as off."
     default: "off"
   credhub.cleanup.protected_deployments:
     description: "Deployment names whose CredHub variables are never deleted, in addition to this deployment, which is always protected."
