@@ -123,3 +123,7 @@ No configuration changes are required, and there are no changes to service provi
 - A broker with no CredHub connection logs one warning at startup and deletes nothing, so a deploy that sets none of the CredHub properties renders and runs as it did before. The four connection properties, `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name`, now default to an empty string, and they go together. Setting only some of them fails the job render with a message that names the missing ones.
 
 - To keep cleanup off on purpose, set `credhub.cleanup.enabled` to `false`. To move the sweep from logging to deleting, set `credhub.cleanup.sweep` to `delete` once the dry-run log looks right.
+
+# Blacksmith
+
+- `bosh.ca_cert` is now required. A manifest that leaves it unset, or sets it to a blank value, fails to render at deploy time with a message that names the property, instead of deploying a broker that cannot start. The Genesis kit's external-director mode already sets it from `params.external_bosh.cacert`, and its default mode sets it from the director's CA starting with the next kit release.

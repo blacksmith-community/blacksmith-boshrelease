@@ -6,9 +6,14 @@ require 'bosh/template/test'
 RELEASE_ROOT = File.expand_path('..', __dir__)
 
 # Properties that have no default in the job spec but that the template reads.
+TEST_CA_PEM = "-----BEGIN CERTIFICATE-----\nMIIBtestca\n-----END CERTIFICATE-----\n".freeze
+
 BASE_PROPERTIES = {
   'env' => 'test',
   'shareable' => false,
+  'bosh' => {
+    'ca_cert' => TEST_CA_PEM,
+  },
   'broker' => {
     'username' => 'blacksmith',
     'password' => 'broker-secret',
@@ -26,11 +31,16 @@ module BlacksmithConfSpecHelpers
 
   # Renders blacksmith.conf with BASE_PROPERTIES plus the given overrides, and
   # returns the rendered text. The job spec defaults still apply underneath.
-  def render_conf(overrides = {})
+  def render_conf(overrides = {}, base = BASE_PROPERTIES)
     release = Bosh::Template::Test::ReleaseDir.new(RELEASE_ROOT)
     job = release.job('blacksmith')
     template = job.template('config/blacksmith.conf')
-    template.render(deep_merge(BASE_PROPERTIES, overrides))
+    template.render(deep_merge(base, overrides))
+  end
+
+  # BASE_PROPERTIES with bosh.ca_cert removed.
+  def base_without_ca
+    BASE_PROPERTIES.merge('bosh' => BASE_PROPERTIES['bosh'].reject { |k, _| k == 'ca_cert' })
   end
 
   # Renders and parses the result as YAML.
@@ -42,6 +52,24 @@ end
 RSpec.configure { |c| c.include BlacksmithConfSpecHelpers }
 
 RSpec.describe 'blacksmith.conf' do
+  describe 'bosh.ca_cert' do
+    it 'fails the render without bosh.ca_cert and names it' do
+      expect { render_conf({}, base_without_ca) }
+        .to raise_error(RuntimeError, /bosh\.ca_cert/)
+    end
+
+    ['', '   ', " \n\t "].each do |blank|
+      it "fails the render for #{blank.inspect} and names the property" do
+        expect { render_conf('bosh' => { 'ca_cert' => blank }) }
+          .to raise_error(RuntimeError, /bosh\.ca_cert.*required/m)
+      end
+    end
+
+    it 'renders a set CA as the cacert value' do
+      expect(render_conf_yaml['bosh']['cacert']).to eq(TEST_CA_PEM)
+    end
+  end
+
   describe 'bosh.request_timeout' do
     it 'defaults to 60 seconds' do
       expect(render_conf_yaml['bosh']['request_timeout']).to eq(60)

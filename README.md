@@ -295,10 +295,13 @@ Defaults to `1G`.
 ### bosh.ca_cert: _PEM encoded CA certificate_
 
 The PEM-encoded CA certificate that signed the BOSH director's and
-its UAA's TLS certificates. The broker's director client always
-verifies the director, so set this whenever the director uses a
-private or self-issued CA, which is the case for every director
-that generates its own certificates.
+its UAA's TLS certificates. This property is required. A manifest
+that leaves it unset or blank fails to render at deploy time with an
+error that names the property, because the broker refuses to start
+without a CA. The broker's director client always verifies the
+director, so the CA must be the one that signed the director's
+certificates, which for a director that generates its own
+certificates is its own private CA.
 
 ### bosh.request_timeout: _seconds_
 
