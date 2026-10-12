@@ -140,6 +140,9 @@ properties:
   bosh.request_timeout:
     description: "Seconds Blacksmith waits for any single BOSH director request before giving up. Long director tasks are not bounded by this; Blacksmith follows them by task ID."
     default: 60
+  bosh.allow_http:
+    description: "The broker refuses a bosh.address that starts with http:// unless this is true. With it set to true, the director credentials travel over plain HTTP, so use it only for development. The bosh.ca_cert property is still required."
+    default: false
 
   credhub.cleanup.enabled:
     description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone. It defaults to true, but the broker only deletes anything once the four connection properties credhub.url, credhub.ca_cert, credhub.client_secret, and credhub.director_name are all set. With none of them set, the broker logs one warning at startup and deletes nothing."

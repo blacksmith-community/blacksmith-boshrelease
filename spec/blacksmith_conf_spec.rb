@@ -52,6 +52,16 @@ end
 RSpec.configure { |c| c.include BlacksmithConfSpecHelpers }
 
 RSpec.describe 'blacksmith.conf' do
+  describe 'bosh.allow_http' do
+    it 'renders false as a YAML boolean by default' do
+      expect(render_conf_yaml['bosh']['allow_http']).to be(false)
+    end
+
+    it 'renders an override to true as a YAML boolean' do
+      expect(render_conf_yaml('bosh' => { 'allow_http' => true })['bosh']['allow_http']).to be(true)
+    end
+  end
+
   describe 'bosh.ca_cert' do
     it 'fails the render without bosh.ca_cert and names it' do
       expect { render_conf({}, base_without_ca) }

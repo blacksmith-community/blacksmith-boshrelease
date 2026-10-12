@@ -127,3 +127,5 @@ No configuration changes are required, and there are no changes to service provi
 # Blacksmith
 
 - `bosh.ca_cert` is now required. A manifest that leaves it unset, or sets it to a blank value, fails to render at deploy time with a message that names the property, instead of deploying a broker that cannot start. The Genesis kit's external-director mode already sets it from `params.external_bosh.cacert`, and its default mode sets it from the director's CA starting with the next kit release.
+
+- Added `bosh.allow_http`, which defaults to `false`. The broker refuses a `bosh.address` that starts with `http://` unless it is `true`, because the director credentials would travel over plain HTTP, so set it only for development. `bosh.ca_cert` is still required.

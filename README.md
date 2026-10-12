@@ -303,6 +303,12 @@ director, so the CA must be the one that signed the director's
 certificates, which for a director that generates its own
 certificates is its own private CA.
 
+### bosh.allow_http: (true|false)
+
+The broker refuses to start when `bosh.address` starts with `http://`, unless this property is `true`. With it set, the director credentials travel over plain HTTP, so use it only for development. The `bosh.ca_cert` property is still required.
+
+Defaults to `false`.
+
 ### bosh.request_timeout: _seconds_
 
 The number of seconds Blacksmith waits for any single BOSH director
