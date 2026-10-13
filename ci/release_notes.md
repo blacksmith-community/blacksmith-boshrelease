@@ -1,131 +1,37 @@
-# Blacksmith BOSH Release v2.3.0
+# Blacksmith BOSH Release v2.5.0
 
-Security-focused release: bumps the Blacksmith service broker to v1.4.0 and swaps the bundled Vault binary from 1.14.10 to 1.21.4.
+This release bumps the Blacksmith service broker to v1.6.0. The broker no longer embeds the bosh CLI, and it now talks to the BOSH director only through the director's REST API. Two of the job's properties change in ways that can stop a deploy or keep the broker from starting, so please read the first section before you upgrade.
 
-## What's New in Blacksmith v1.4.0
+## Before you upgrade
 
-**Broker API library modernized (brokerapi v8 → v13)** — The broker moves from the end-of-life `pivotal-cf/brokerapi/v8` to the maintained `code.cloudfoundry.org/brokerapi/v13`. Service provisioning and binding behavior are unchanged; the one operator-visible effect is the broker's log output format (see Upgrade Notes).
+- **`bosh.ca_cert` is now required**
 
-**Bundled Vault binary 1.14.10 → 1.21.4** — The embedded Vault server the broker uses for per-instance credential storage moves to 1.21.4, the terminal Vault 1.x Community Edition release, clearing the reachable Vault CVE set.
+  A manifest that leaves it unset, or sets it to a blank value, now fails to render at deploy time with a message that names the property, instead of deploying a broker that can't start. The broker verifies the director's certificate, and its UAA's, against this CA whatever the scheme of `bosh.address`. The Genesis kit's external-director mode already sets it from `params.external_bosh.cacert`, and the kit's default mode will set it from the director's CA starting with the next kit release.
 
-**Go dependency and toolchain refresh** — Rebuilt on Go 1.25.12 with refreshed security-sensitive dependencies (x/crypto, x/net, grpc, go-jose, circl, vault/api). The shipped broker binary scans clean for reachable vulnerabilities.
+- **Plain HTTP needs `bosh.allow_http`**
 
-## Upgrade Notes
+  We added `bosh.allow_http`, which defaults to `false`. The broker refuses a `bosh.address` that starts with `http://` unless it's `true`, because the director's credentials would travel over plain HTTP, so we suggest setting it only for development. `bosh.ca_cert` is still required when it's on.
 
-**Log format change (the one operator-visible change)** — Broker-library log lines now emit standard-library structured JSON (`slog`) instead of Lager-format JSON. If you ship or alert on broker logs by parsing Lager fields (`source`, `message`, `data`), re-key those rules to the `slog` JSON shape before or alongside the upgrade. Provisioning, binding, and credential behavior are otherwise unchanged.
+## What changed in Blacksmith v1.6.0
 
-**Ephemeral disk during the swap** — The 1.21.4 Vault binary is larger than 1.14.10; the broker VM needs enough `/var/vcap/data` to extract the new package alongside the old one during the upgrade. Ensure the broker instance group has an adequately sized ephemeral disk.
+- Every director operation now goes through the boshapi client, so the broker no longer runs bosh CLI code or exports `BOSH_ENVIRONMENT`, `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`, or `BOSH_CA_CERT` into its environment.
 
-No configuration changes are required, and there are no changes to service provisioning, binding, or credential formats.
+- When a delete finishes on the director but the broker can't remove the instance from its index, the broker now keeps answering that the delete is in progress, so Cloud Foundry's polling eventually times out. Before, the broker told Cloud Foundry that the delete had succeeded while the instance was still indexed.
 
-# Safe
+- The broker now gives up on a BOSH task, and releases its slot, when it has been unable to read that task from the director for six hours. A read that succeeds starts the count again, so a long task that the broker can still read is followed to its end. The task itself keeps running on the director. The broker's `bosh.task_watch_max` setting changes the six hours, but this job doesn't render that setting, so the default applies to every deployment of the release.
 
-- Bumped Safe to v1.10.0
+- The broker's own release notes list the API changes, such as the manifest routes no longer returning a placeholder manifest and the configs API returning the director's content unchanged. They're at https://github.com/blacksmith-community/blacksmith/releases/tag/v1.6.0.
 
-# Safe
+## Other changes since v2.4.0
 
-- Bumped Safe to v1.20.0
+- We added `bosh.request_timeout`, the number of seconds Blacksmith waits for any single BOSH director request, with a default of 60. Long director tasks aren't bounded by it, because Blacksmith follows them by task ID. A value that isn't a positive whole number fails the job render with a message that names the property.
 
-# Safe
+- The job now quotes every credential and free-text value it writes into `blacksmith.conf`. That covers the bosh address, username, and password, the shield block, the broker's username and password, the Cloud Foundry API entries, and the bosh network name. A value with a colon followed by a space, a hash, a quote, a backslash, or nothing at all reaches Blacksmith exactly as written, and a password made only of digits stays a string. Ports and booleans keep their YAML types.
 
-- Bumped Safe to v1.22.0
+- CredHub cleanup is now on by default. `credhub.cleanup.enabled` defaults to `true`, and `credhub.cleanup.sweep` defaults to `dry-run`, which logs what the sweep would delete and removes nothing. An unquoted `sweep: off` in a manifest now means the string `off`, not `false`.
 
-# Safe
-
-- Bumped Safe to v1.23.0
-
-# Safe
-
-- Bumped Safe to v1.24.0
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.2
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.3, which lets the broker trust a private CA when it talks to the Cloud Foundry API.
-- Added `broker.cf.ca_cert` and `broker.cf.skip_ssl_validation`. They are rendered into every `broker.cf.apis` entry as `cacert` and `skip_ssl_validation`, and an entry may set its own `ca_cert` or `skip_ssl_validation` to override them.
-- Removed `bosh.skip_ssl_validation`. The broker's BOSH client never read it, so a director with a private CA has always needed `bosh.ca_cert`.
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.4, which fixes the deprovision-during-provision race: a deprovision is now rejected with a concurrency error while the instance's provision task is still running, only a director 404 counts as a missing deployment (an in-flight first deploy with an empty manifest no longer does), and the reconciler reports deployments that have neither an index entry nor a CF instance instead of adopting them, while sweeping index entries whose deployment the director confirms gone.
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.5, which moves the broker from `code.cloudfoundry.org/brokerapi/v13` to `github.com/fivetwenty-io/osbapi/v2` and adds a tombstone sweep to the vault index reconciler.
-- The broker library change is not visible in service provisioning, binding, or credential formats, and the OSB endpoints, status codes, and error bodies are unchanged. The one thing operators will notice is that the structured `slog` JSON lines the previous library wrote for each broker request are gone, because the new library does not log on its own. Blacksmith still writes its own request and routing log lines, so alerting that keys on those lines keeps working, and anything that keyed on the library's `slog` lines should move to them.
-- Basic authentication on the `/v2` endpoints is enforced by Blacksmith's own front door exactly as before, and a request that omits `X-Broker-Api-Version` is still accepted, now with version 2.17 filled in.
-- The reconciler now sweeps deleted tombstones out of the vault index. A tombstone that names no deployment ages out on its own without a director call, and a tombstone that names a deployment is removed once the director confirms the deployment is gone and no task is running for it. The deprovision race guards from v2.3.6 are unchanged.
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.7, which makes a failed Valkey bind or unbind say why it failed. Every Valkey ACL error now names the step that failed (dial, AUTH, PING, ACL SETUSER, ACL DELUSER, or ACL SAVE), the node's address, and whether TLS was in use, and it adds a likely cause when it can. A node that answers `MISCONF` because it cannot write its snapshots now gets a hint to check that node's disk and server log, where before the platform saw only "internal server error".
-- Every failed attempt inside the ACL retry loop is logged at error level with the instance ID, the binding ID, the address, and the attempt number.
-- The broker library moves to osbapi v2.0.2. An error the library has no mapping for still returns a 500, but its description is now the error's own message, so `cf` shows the operator the cause. Every 5xx is logged with the operation, the request path, and the instance and binding IDs, through Blacksmith's own logger under the `osbapi` name. This brings back a broker-library log line for failed requests, which v1.4.5 had dropped.
-- Error text that reaches the platform never carries a binding password or the admin password. Valkey echoes part of a rejected ACL SETUSER back in its reply, and Blacksmith now redacts the password from that reply. The broker also refuses a `vault.address` that has credentials embedded in it.
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.8, which fixes how the broker answers Cloud Foundry's last-operation polls. Until now the broker looked at the newest BOSH task on the deployment and treated anything that wasn't a delete as a provision. A finished `bosh ssh`, `restart`, `recreate`, or `cck` task could therefore make Cloud Foundry report a delete as succeeded while BOSH was still deleting the deployment. On the way, the broker also added the instance back to vm-monitor and could reschedule the SHIELD backup it had just removed.
-
-- The broker now returns operation data with every provision and deprovision, and it records the accepted operation in Vault before it answers. A delete finishes only when the delete task the broker started is done and the director confirms the deployment is gone, and it fails when that task fails. A create finishes only on its own deploy task, so a task someone runs by hand on the deployment can't finish it early or hide a failed deploy. Polling a delete never runs the steps that follow a create.
-
-- The broker names its own deploy and delete tasks from the deployment's BOSH events. It no longer takes the newest task, which could be a `bosh ssh` session or a vm-monitor vitals request that ran while the deploy or delete was in progress.
-
-- If the broker restarts in the middle of a create or delete, the next poll recovers the task from the deployment's events. If BOSH never started the task and nothing is running on the deployment, the poll answers failed and says the operation was interrupted, so the request can be retried instead of waiting out Cloud Controller's polling timeout.
-
-- A failed delete attempt that the broker is going to retry no longer reports the delete as failed. A repeated delete request for an instance whose delete is still running is accepted without starting a second delete. The broker removes an instance from its index only when the director confirms the deployment is gone, so a director error no longer counts as that confirmation. When a deploy fails, the broker still deletes the failed deployment, but now it does so in the background and only once.
-
-- Creates and deletes that an earlier release accepted and that are still running during the upgrade keep working, because the broker falls back to the state it recorded in Vault. No configuration changes are required.
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.9, which makes Valkey ACL operations fail at once, with an explanation, instead of retrying a request that can't succeed. A MISCONF reply, a WRONGPASS reply, a NOAUTH reply, or a NOPERM reply now ends the operation on the first attempt. Each failure message names the likely causes, such as a Valkey instance that can't write its persistence files, an admin password that no longer matches the one Valkey was started with, or an admin user that lacks permission to manage ACL users.
-
-- The broker log no longer carries credentials, manifest bodies, secret environment values, rabbitmqctl arguments, or credential query parameters. Failed init script output also has VAULT_TOKEN and BOSH_CLIENT_SECRET masked before it is logged or returned.
-
-- The broker library moves to osbapi v2.0.3. It maps an unauthorized error to a 401, a quota error to a 422, an invalid-parameter error to a 400, and a binding conflict to a 409, so Cloud Foundry shows the operator a specific status instead of a generic 500.
-
-- No configuration changes are required.
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.4.9
-
-# Blacksmith
-
-- Bumped Blacksmith to v1.5.0, which can delete a deprovisioned service instance's variables from the director's CredHub. Today those variables stay behind after the deployment is deleted, and they pile up over time. With the feature on, the broker deletes them once the director confirms the deployment is gone.
-
-- We added nine job properties for this. The feature is on by default through `credhub.cleanup.enabled`, and setting that property to `false` turns it off and keeps the broker behaving exactly as v1.4.9 does.
-
-- The broker deletes nothing until it has a CredHub connection, which takes four properties set together. They are `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name`. The URL is the HTTPS address of the director's CredHub, such as `https://10.0.0.6:8844`. The CA certificate signs that CredHub, or is the pinned server certificate. The director name must equal the name the director reports in its info, because every CredHub path starts with it.
-
-- The client secret belongs to a UAA client on the director's UAA that holds the `credhub.read` and `credhub.write` authorities. The client ID defaults to `blacksmith_credhub`, and `credhub.client_id` changes it. If the director's UAA is not the one named in the director's info, `credhub.uaa_url` points the broker at the right one.
-
-- `credhub.cleanup.sweep` controls a periodic sweep for older orphaned variables. It defaults to `dry-run`, which only logs what it would delete, and it also accepts `delete`, which removes the variables, and `off`, which skips the sweep. We suggest reading the `dry-run` log before moving to `delete`.
-
-- `credhub.cleanup.protected_deployments` lists deployment names whose variables are never deleted. The broker's own deployment is always protected, so it does not need to appear in the list.
-
-- A deployment someone deletes by hand keeps its variables, because the broker only cleans up after a deprovision it handled.
-
-- Upgrading needs no configuration changes. A deploy that sets none of the CredHub properties keeps running as before, and it logs the warning described below.
-
-# Blacksmith
-
-- Added `bosh.request_timeout`, the seconds Blacksmith waits for any single BOSH director request, with a default of 60. Long director tasks are not bounded by it, because Blacksmith follows them by task ID. A value that is not a positive whole number now fails the job render with a message that names the property.
-
-- The bosh `address`, `username`, and `password` in `blacksmith.conf` are now quoted, so a password containing `:` or `#`, or one made only of digits, reaches Blacksmith exactly as written.
-
-- CredHub cleanup is now on by default. `credhub.cleanup.enabled` defaults to `true`, and `credhub.cleanup.sweep` defaults to `dry-run`, which logs what the sweep would delete and removes nothing.
-
-- A broker with no CredHub connection logs one warning at startup and deletes nothing, so a deploy that sets none of the CredHub properties renders and runs as it did before. The four connection properties, `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name`, now default to an empty string, and they go together. Setting only some of them fails the job render with a message that names the missing ones.
+- A broker with no CredHub connection logs one warning at startup and deletes nothing, so a deploy that sets none of the CredHub properties renders and runs as it did before. The four connection properties, `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name`, now default to an empty string, and they go together. While cleanup is enabled, setting only some of them fails the job render with a message that names the missing ones.
 
 - To keep cleanup off on purpose, set `credhub.cleanup.enabled` to `false`. To move the sweep from logging to deleting, set `credhub.cleanup.sweep` to `delete` once the dry-run log looks right.
 
-# Blacksmith
-
-- `bosh.ca_cert` is now required. A manifest that leaves it unset, or sets it to a blank value, fails to render at deploy time with a message that names the property, instead of deploying a broker that cannot start. The Genesis kit's external-director mode already sets it from `params.external_bosh.cacert`, and its default mode sets it from the director's CA starting with the next kit release.
-
-- Added `bosh.allow_http`, which defaults to `false`. The broker refuses a `bosh.address` that starts with `http://` unless it is `true`, because the director credentials would travel over plain HTTP, so set it only for development. `bosh.ca_cert` is still required.
+- The release's job template specs now run before every release is built.
