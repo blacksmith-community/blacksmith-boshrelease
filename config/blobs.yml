@@ -1,5 +1,6 @@
 blacksmith/blacksmith-1.6.1.tar.bz2:
   size: 44901686
+  object_id: f0179ef8-e70a-4d29-665a-d4570093b594
   sha: sha256:518a3d27b42747c1f069d168273e3e822ce961a38959395ca3d55f69bb00acea
 safe/safe-1.24.0-linux-amd64:
   size: 15477826
