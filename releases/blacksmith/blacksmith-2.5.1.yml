@@ -1,0 +1,39 @@
+name: blacksmith
+version: 2.5.1
+commit_hash: cf3c5d9
+uncommitted_changes: false
+jobs:
+- name: blacksmith
+  version: 6af5f6b29eeedc4fb85b77779b87f06366519d693ff3fc5103c04ad0e707ea43
+  fingerprint: 6af5f6b29eeedc4fb85b77779b87f06366519d693ff3fc5103c04ad0e707ea43
+  sha1: sha256:9778283f7fea93a6ad8b2a37ca21ab80c892ea9e48d604ec0384bc1160a56620
+  packages:
+  - blacksmith
+  - safe
+  - vault
+- name: example-blacksmith-plans
+  version: 502dd969885cb53ddae58de798c6c9f3b344bf2c99c25611426fbbd1a2df7b5b
+  fingerprint: 502dd969885cb53ddae58de798c6c9f3b344bf2c99c25611426fbbd1a2df7b5b
+  sha1: sha256:b96790afcb2ce8d1d7b60b9e499ef971265de82f21d1d5a19aae215af7c97ef8
+  packages: []
+packages:
+- name: blacksmith
+  version: 175d1da4fdfa7b6835d9b69878c18189d3f0434b2d3123ee3119cf84221f9605
+  fingerprint: 175d1da4fdfa7b6835d9b69878c18189d3f0434b2d3123ee3119cf84221f9605
+  sha1: sha256:6b0f215aa2bfdbfc78b8574964b50b8d6ec086483f92e03044eef04916bf6714
+  dependencies: []
+- name: safe
+  version: 1d46482bc1b89b1a17b25491b95f09459ce467265d0875820b8c0293fd39052f
+  fingerprint: 1d46482bc1b89b1a17b25491b95f09459ce467265d0875820b8c0293fd39052f
+  sha1: sha256:e229cda19fd79c6f8d3b365ba3a93620f4943c029524d9ba40f7f189be3ecaee
+  dependencies: []
+- name: vault
+  version: a7e636137d93a9d6435b71352c02f05fad2dd394af0a341ee9a88c4456346da9
+  fingerprint: a7e636137d93a9d6435b71352c02f05fad2dd394af0a341ee9a88c4456346da9
+  sha1: sha256:c024055bb24901bb6e654c2827965b1439a07145dd9dab5fc076ba965023e7ab
+  dependencies: []
+license:
+  version: f7a524643770078881bdfa03661a6aa2dec6f55e7628ac9dc450e12b933c3e19
+  fingerprint: f7a524643770078881bdfa03661a6aa2dec6f55e7628ac9dc450e12b933c3e19
+  sha1: sha256:2bf2d9110cf263ee53bfcf9b19672df2e1ee80026ef59345016a3907c3f8f5cb
+no_compression: false
