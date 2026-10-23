@@ -8,6 +8,10 @@ No job properties change, so moving from v2.5.2 needs no manifest change. The no
 
 The broker never uploads a release, so every target version of a release upgrade must already be on the director. The broker now also refuses a stemcell upgrade for an instance that another unfinished upgrade task holds, and requests that it can't act on now get a 400, where they used to get a 500.
 
+The credhub block now fails the render when only some of its four connection properties are set, even with `credhub.cleanup.enabled` off, so set `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name` together, or none of them.
+
+The switches `certificates.inventory.enabled`, `certificates.rotation.enabled`, `certificates.patch_in_place.enabled`, and `credhub.cleanup.enabled` now accept only a real true or false, and the render fails on a quoted string such as "false", "no", or "off", where before any string counted as true.
+
 ## What changed in Blacksmith v1.7.0
 
 - An upgrade request can carry release targets, either alone or together with a stemcell target, and the upgrade tab in the UI offers the releases each deployment runs.

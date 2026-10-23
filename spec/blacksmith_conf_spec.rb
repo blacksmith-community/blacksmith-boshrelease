@@ -292,5 +292,19 @@ RSpec.describe 'blacksmith.conf' do
       expect(certs['inventory']['enabled']).to eq(false)
       expect(certs['patch_in_place']['enabled']).to eq(true)
     end
+
+    %w[inventory rotation patch_in_place].each do |gate|
+      it "raises when #{gate} is the string \"false\"" do
+        expect { render_conf('certificates' => { gate => { 'enabled' => 'false' } }) }
+          .to raise_error(RuntimeError, /certificates\.#{gate}\.enabled must be true or false, but it is "false"/)
+      end
+    end
+
+    it 'raises when credhub cleanup enabled is the string "no"' do
+      credhub = { 'url' => 'https://c:8844', 'ca_cert' => 'ca', 'client_secret' => 's', 'director_name' => 'd',
+                  'cleanup' => { 'enabled' => 'no' } }
+      expect { render_conf('credhub' => credhub) }
+        .to raise_error(RuntimeError, /credhub\.cleanup\.enabled must be true or false, but it is "no"/)
+    end
   end
 end
