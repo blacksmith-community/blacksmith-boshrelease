@@ -209,11 +209,17 @@ RSpec.describe 'blacksmith.conf' do
       }
     end
 
-    it 'renders cleanup on with a dry-run sweep and an empty connection when no credhub property is set' do
-      credhub = render_conf_yaml['credhub']
-      expect(credhub['cleanup']['enabled']).to eq(true)
+    it 'renders no credhub block and does not raise when no credhub property is set' do
+      expect(render_conf_yaml).not_to have_key('credhub')
+    end
+
+    it 'renders no credhub block when cleanup is enabled and none of the four are set' do
+      expect(render_conf_yaml('credhub' => { 'cleanup' => { 'enabled' => true } })).not_to have_key('credhub')
+    end
+
+    it 'renders a dry-run sweep by default when the connection is set' do
+      credhub = render_conf_yaml('credhub' => connection)['credhub']
       expect(credhub['cleanup']['sweep']).to eq('dry-run')
-      expect(credhub).to include('url' => '', 'ca_cert' => '', 'client_secret' => '', 'director_name' => '')
     end
 
     it 'renders all four connection values when all four are set' do
@@ -235,21 +241,56 @@ RSpec.describe 'blacksmith.conf' do
     end
 
     it 'renders a sweep of false as off' do
-      credhub = render_conf_yaml('credhub' => { 'cleanup' => { 'sweep' => false } })['credhub']
+      credhub = render_conf_yaml('credhub' => connection.merge('cleanup' => { 'sweep' => false }))['credhub']
       expect(credhub['cleanup']['sweep']).to eq('off')
     end
 
     it 'keeps the broker deployment first in the protected list' do
-      credhub = render_conf_yaml('credhub' => { 'cleanup' => { 'protected_deployments' => ['other-one'] } })['credhub']
+      credhub = render_conf_yaml('credhub' => connection.merge('cleanup' => { 'protected_deployments' => ['other-one'] }))['credhub']
       expect(credhub['cleanup']['protected_deployments']).to eq(['my-deployment', 'other-one'])
     end
 
     it 'puts the job deployment name first in the protected list by default' do
-      expect(render_conf_yaml['credhub']['cleanup']['protected_deployments'].first).to eq('my-deployment')
+      expect(render_conf_yaml('credhub' => connection)['credhub']['cleanup']['protected_deployments'].first).to eq('my-deployment')
     end
 
-    it 'renders no credhub block when cleanup is disabled' do
+    it 'renders cleanup disabled when the connection is set and cleanup is off' do
+      credhub = render_conf_yaml('credhub' => connection.merge('cleanup' => { 'enabled' => false }))['credhub']
+      expect(credhub).to include(connection)
+      expect(credhub['cleanup']['enabled']).to eq(false)
+    end
+
+    it 'raises on a partial connection even when cleanup is disabled' do
+      partial = connection.slice('url', 'ca_cert', 'client_secret').merge('cleanup' => { 'enabled' => false })
+      expect { render_conf('credhub' => partial) }
+        .to raise_error(RuntimeError, /credhub\.director_name/)
+    end
+
+    it 'renders no credhub block with cleanup disabled and no connection' do
       expect(render_conf_yaml('credhub' => { 'cleanup' => { 'enabled' => false } })).not_to have_key('credhub')
+    end
+  end
+
+  describe 'certificates switches' do
+    it 'defaults inventory on, rotation off, and patch in place off' do
+      expect(render_conf_yaml['certificates']).to eq(
+        'inventory' => { 'enabled' => true },
+        'rotation' => { 'enabled' => false },
+        'patch_in_place' => { 'enabled' => false },
+      )
+    end
+
+    it 'renders rotation on when set' do
+      certs = render_conf_yaml('certificates' => { 'rotation' => { 'enabled' => true } })['certificates']
+      expect(certs['rotation']['enabled']).to eq(true)
+      expect(certs['inventory']['enabled']).to eq(true)
+      expect(certs['patch_in_place']['enabled']).to eq(false)
+    end
+
+    it 'renders inventory off and patch in place on when set' do
+      certs = render_conf_yaml('certificates' => { 'inventory' => { 'enabled' => false }, 'patch_in_place' => { 'enabled' => true } })['certificates']
+      expect(certs['inventory']['enabled']).to eq(false)
+      expect(certs['patch_in_place']['enabled']).to eq(true)
     end
   end
 end

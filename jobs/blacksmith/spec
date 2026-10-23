@@ -181,3 +181,13 @@ properties:
   limits.memory.vault:
     description: "Memory limit for the vault process"
     default: "1G"
+
+  certificates.inventory.enabled:
+    description: "When true, Blacksmith keeps an inventory of the certificates it can see in the service instances it manages. It defaults to true."
+    default: true
+  certificates.rotation.enabled:
+    description: "When true, Blacksmith may rotate certificates that the inventory reports as due. It defaults to false, so no certificate changes until an operator turns it on."
+    default: false
+  certificates.patch_in_place.enabled:
+    description: "When true, Blacksmith may patch a renewed certificate onto a running VM without recreating it. It defaults to false, and it only takes effect when certificates.rotation.enabled is also true."
+    default: false
