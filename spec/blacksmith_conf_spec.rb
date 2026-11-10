@@ -343,6 +343,11 @@ RSpec.describe 'blacksmith.conf' do
       expect(cmds).to eq('credential' => { 'key' => 'k-1' })
     end
 
+    it 'treats a null director_workers as unset' do
+      conf = render_conf_yaml('bosh' => { 'director_workers' => nil })
+      expect(conf['bosh']).not_to have_key('director_workers')
+    end
+
     it 'renders a valid director_workers' do
       expect(render_conf_yaml('bosh' => { 'director_workers' => 6 })['bosh']['director_workers']).to eq(6)
       expect(render_conf_yaml('bosh' => { 'director_workers' => 2 })['bosh']['director_workers']).to eq(2)
