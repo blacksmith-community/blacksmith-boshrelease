@@ -307,4 +307,52 @@ RSpec.describe 'blacksmith.conf' do
         .to raise_error(RuntimeError, /credhub\.cleanup\.enabled must be true or false, but it is "no"/)
     end
   end
+
+  describe 'command switches' do
+    it 'renders no commands block and no director_workers when unset' do
+      conf = render_conf_yaml
+      expect(conf).not_to have_key('commands')
+      expect(conf['bosh']).not_to have_key('director_workers')
+    end
+
+    it 'renders commands enabled true and false' do
+      expect(render_conf_yaml('commands' => { 'enabled' => true })['commands']).to eq('enabled' => true)
+      expect(render_conf_yaml('commands' => { 'enabled' => false })['commands']).to eq('enabled' => false)
+    end
+
+    it 'renders allow_root true and false without touching enabled' do
+      expect(render_conf_yaml('commands' => { 'allow_root' => true })['commands']).to eq('allow_root' => true)
+      expect(render_conf_yaml('commands' => { 'allow_root' => false })['commands']).to eq('allow_root' => false)
+    end
+
+    it 'renders both switches together' do
+      cmds = render_conf_yaml('commands' => { 'enabled' => false, 'allow_root' => true })['commands']
+      expect(cmds).to eq('enabled' => false, 'allow_root' => true)
+    end
+
+    %w[enabled allow_root].each do |name|
+      it "raises when commands.#{name} is the string \"false\"" do
+        expect { render_conf('commands' => { name => 'false' }) }
+          .to raise_error(RuntimeError, /commands\.#{name} must be true or false, but it is "false"/)
+      end
+    end
+
+    it 'renders the credential key only when set' do
+      expect(render_conf_yaml('commands' => { 'credential' => { 'key' => '' } })).not_to have_key('commands')
+      cmds = render_conf_yaml('commands' => { 'credential' => { 'key' => 'k-1' } })['commands']
+      expect(cmds).to eq('credential' => { 'key' => 'k-1' })
+    end
+
+    it 'renders a valid director_workers' do
+      expect(render_conf_yaml('bosh' => { 'director_workers' => 6 })['bosh']['director_workers']).to eq(6)
+      expect(render_conf_yaml('bosh' => { 'director_workers' => 2 })['bosh']['director_workers']).to eq(2)
+    end
+
+    [0, 1, -3, 'four', 2.5, '4'].each do |bad|
+      it "raises when director_workers is #{bad.inspect}" do
+        expect { render_conf('bosh' => { 'director_workers' => bad }) }
+          .to raise_error(RuntimeError, /bosh\.director_workers must be a whole number of 2 or more/)
+      end
+    end
+  end
 end

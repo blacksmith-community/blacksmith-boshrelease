@@ -144,6 +144,16 @@ properties:
     description: "The broker refuses a bosh.address that starts with http:// unless this is true. With it set to true, the director credentials travel over plain HTTP, so use it only for development. The bosh.ca_cert property is still required."
     default: false
 
+  bosh.director_workers:
+    description: "How many workers the director runs, which bounds how many commands Blacksmith runs at once. Leave it unset to take the broker's default of 4. When set, it must be a whole number of 2 or more, because the broker refuses 1, and the job fails to render otherwise."
+
+  commands.enabled:
+    description: "When false, operators cannot run commands on the nodes of service deployments. Leave it unset to take the broker's default, which is true."
+  commands.allow_root:
+    description: "When true, a command may run as root. It has no effect while commands.enabled is false. Leave it unset to take the broker's default, which is false, so root is refused."
+  commands.credential.key:
+    description: "Optional secret. When set, a command request must carry it as a second credential. Leave it unset or empty to require none."
+
   credhub.cleanup.enabled:
     description: "When true, Blacksmith deletes a service instance's variables from the director's CredHub after the director confirms the instance's deployment is gone. It defaults to true, but the broker only deletes anything once the four connection properties credhub.url, credhub.ca_cert, credhub.client_secret, and credhub.director_name are all set. With none of them set, the broker logs one warning at startup and deletes nothing."
     default: true
