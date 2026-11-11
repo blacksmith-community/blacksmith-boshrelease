@@ -1,23 +1,29 @@
-# Blacksmith BOSH Release v2.6.0
+# Blacksmith BOSH Release v2.7.0
 
-This release bumps the Blacksmith service broker to v1.7.0, which adds release upgrades to the broker's upgrade feature. Until now, an upgrade task could only move service instances to a new stemcell. A task can now also name target versions of BOSH releases, such as a new valkey-forge or bpm, and the broker sets those versions in each instance's manifest before it redeploys that instance.
+This release bumps the Blacksmith service broker to v1.8.0, which adds a certificate inventory with operator-approved rotation, a Run command batch operation, a new SSH terminal in the console, and tighter handling of tenant request parameters. It also adds job properties that switch the certificate features and the Run command operation on and off.
 
 ## Upgrading
 
-No job properties change, so moving from v2.5.2 needs no manifest change. The notes for v2.5.0 still apply to anyone upgrading from an earlier release, because `bosh.ca_cert` is required, and plain HTTP needs `bosh.allow_http`.
+Moving from v2.6.0 needs no manifest change. The new properties all have defaults, so an existing deployment keeps working and gets the inventory without further settings. The notes for v2.5.0 still apply to anyone upgrading from an earlier release, because `bosh.ca_cert` is required, and plain HTTP needs `bosh.allow_http`.
 
-The broker never uploads a release, so every target version of a release upgrade must already be on the director. The broker now also refuses a stemcell upgrade for an instance that another unfinished upgrade task holds, and requests that it can't act on now get a 400, where they used to get a 500.
+The release adds `certificates.inventory.enabled`, which defaults to true, and `certificates.rotation.enabled` and `certificates.patch_in_place.enabled`, which both default to false. Patching in place takes effect only when rotation is also on. These switches, and `credhub.cleanup.enabled`, now accept only a real true or false, and the render fails on a quoted string such as "false", "no", or "off", where before, any string counted as true. Check any manifest that quotes one of them before the upgrade.
 
-The credhub block now fails the render when only some of its four connection properties are set, even with `credhub.cleanup.enabled` off, so set `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name` together, or none of them.
+The credhub block now fails the render when only some of its four connection properties are set, even with `credhub.cleanup.enabled` off. Set `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name` together, or none of them.
 
-The switches `certificates.inventory.enabled`, `certificates.rotation.enabled`, `certificates.patch_in_place.enabled`, and `credhub.cleanup.enabled` now accept only a real true or false, and the render fails on a quoted string such as "false", "no", or "off", where before any string counted as true.
+Rotation regenerates certificates through the broker's CredHub connection, so it can work only when those credhub properties are set.
 
-## What changed in Blacksmith v1.7.0
+The Run command operation can now be switched off with `commands.enabled`. Root stays refused by default, and `commands.allow_root` turns it on only while commands are enabled. The release also takes `commands.credential.key`, a secret that adds a second credential to every command request, and `bosh.director_workers`, which tells the broker how many workers the director has. When set, `bosh.director_workers` must be a whole number of 2 or more, and the render fails on anything lower. A property that is left unset stays out of the broker's configuration, so the broker keeps its own default, which is Run command on, root refused, no second credential, and four director workers.
 
-- An upgrade request can carry release targets, either alone or together with a stemcell target, and the upgrade tab in the UI offers the releases each deployment runs.
+## What changed in Blacksmith v1.8.0
 
-- The broker's API gained `GET /b/bosh/releases` and `GET /b/bosh/deployment-releases`, which list the director's releases and the releases Blacksmith manages in each deployment.
+- The broker keeps an inventory of the certificates behind its service instances and shows their expiry dates in the console, and an operator can rotate selected leaf certificates by redeploying, or by patching them in place on the VMs.
 
-- The broker refuses to upgrade an instance that another unfinished upgrade task already holds, and it skips a stored upgrade task that it can't decode, where before it retried that task until shutdown.
+- A new Run command batch operation runs one command on every VM behind the selected service instances, with a preview, a confirmation for dangerous commands, bounded parallelism, and a pause when a node fails.
 
-- The broker's own release notes are at https://github.com/blacksmith-community/blacksmith/releases/tag/v1.7.0.
+- Batch jobs can choose to pause on failure, and the console gained a wterm SSH terminal with color schemes, a maximize control, and tabs that survive a reload.
+
+- All BOSH calls now go through the boshapi client, and all YAML handling goes through graft.
+
+- Request parameters from a tenant are now treated as plain text, so they can no longer reach the broker's template operators, and Cloud Foundry registrations no longer store the admin password.
+
+- The broker's own release notes are at https://github.com/blacksmith-community/blacksmith/releases/tag/v1.8.0.
