@@ -1,29 +1,23 @@
-# Blacksmith BOSH Release v2.7.0
+# Blacksmith BOSH Release v2.7.1
 
-This release bumps the Blacksmith service broker to v1.8.0, which adds a certificate inventory with operator-approved rotation, a Run command batch operation, a new SSH terminal in the console, and tighter handling of tenant request parameters. It also adds job properties that switch the certificate features and the Run command operation on and off.
+This release bumps the Blacksmith service broker to v1.8.1, which makes the status endpoint report real health, adds a Max in flight choice and clearer messages to the Run command screens, and fixes several terminal and Redis client problems.
 
 ## Upgrading
 
-Moving from v2.6.0 needs no manifest change. The new properties all have defaults, so an existing deployment keeps working and gets the inventory without further settings. The notes for v2.5.0 still apply to anyone upgrading from an earlier release, because `bosh.ca_cert` is required, and plain HTTP needs `bosh.allow_http`.
+Moving from v2.7.0 needs no manifest change, and this release adds no job properties. The notes for v2.7.0 still apply to anyone upgrading from an earlier release.
 
-The release adds `certificates.inventory.enabled`, which defaults to true, and `certificates.rotation.enabled` and `certificates.patch_in_place.enabled`, which both default to false. Patching in place takes effect only when rotation is also on. These switches, and `credhub.cleanup.enabled`, now accept only a real true or false, and the render fails on a quoted string such as "false", "no", or "off", where before, any string counted as true. Check any manifest that quotes one of them before the upgrade.
+Anything that polls `/b/status` should expect the broker to report an unhealthy dependency now. A director or Vault that can't be reached, or a Vault that is sealed, turns `healthy` to false while the response stays a 200.
 
-The credhub block now fails the render when only some of its four connection properties are set, even with `credhub.cleanup.enabled` off. Set `credhub.url`, `credhub.ca_cert`, `credhub.client_secret`, and `credhub.director_name` together, or none of them.
+## What changed in Blacksmith v1.8.1
 
-Rotation regenerates certificates through the broker's CredHub connection, so it can work only when those credhub properties are set.
+- The `/b/status` endpoint reports the real build version and the commit, and it checks the BOSH director and Vault, including a sealed Vault, instead of always saying everything is connected.
 
-The Run command operation can now be switched off with `commands.enabled`. Root stays refused by default, and `commands.allow_root` turns it on only while commands are enabled. The release also takes `commands.credential.key`, a secret that adds a second credential to every command request, and `bosh.director_workers`, which tells the broker how many workers the director has. When set, `bosh.director_workers` must be a whole number of 2 or more, and the render fails on anything lower. A property that is left unset stays out of the broker's configuration, so the broker keeps its own default, which is Run command on, root refused, no second credential, and four director workers.
+- The Run command screens gained a Max in flight choice that goes up to what the director allows, a full-width Command box, and help text that says why the Run button is still waiting. The confirmation label now reads `To confirm, type "run as vcap" below`, and it says plainly when the typed text doesn't match.
 
-## What changed in Blacksmith v1.8.0
+- A terminal tab that fails to start offers Reconnect and stays marked as failed after a reload. The console also stopped writing sensitive text to the browser console.
 
-- The broker keeps an inventory of the certificates behind its service instances and shows their expiry dates in the console, and an operator can rotate selected leaf certificates by redeploying, or by patching them in place on the VMs.
+- The Redis clients behave as they did before the upgrade to go-redis v9, so older Redis nodes still connect, `tls_uri` connections still work, silent nodes are handled as before, and the Valkey check still diagnoses the connection limit, all as they did in v1.8.0.
 
-- A new Run command batch operation runs one command on every VM behind the selected service instances, with a preview, a confirmation for dangerous commands, bounded parallelism, and a pause when a node fails.
+- The broker moved to Ginkgo v2, go-redis v9, and yaml v4, and several tests that failed now and then under load were made reliable.
 
-- Batch jobs can choose to pause on failure, and the console gained a wterm SSH terminal with color schemes, a maximize control, and tabs that survive a reload.
-
-- All BOSH calls now go through the boshapi client, and all YAML handling goes through graft.
-
-- Request parameters from a tenant are now treated as plain text, so they can no longer reach the broker's template operators, and Cloud Foundry registrations no longer store the admin password.
-
-- The broker's own release notes are at https://github.com/blacksmith-community/blacksmith/releases/tag/v1.8.0.
+- The broker's own release notes are at https://github.com/blacksmith-community/blacksmith/releases/tag/v1.8.1.
