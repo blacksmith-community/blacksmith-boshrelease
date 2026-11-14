@@ -150,7 +150,7 @@ properties:
   commands.enabled:
     description: "When false, operators cannot run commands on the nodes of service deployments. Leave it unset to take the broker's default, which is true."
   commands.allow_root:
-    description: "When true, a command may run as root. It has no effect while commands.enabled is false. Leave it unset to take the broker's default, which is false, so root is refused."
+    description: "When true, a command may run as root. It has no effect while commands.enabled is false. Leave it unset to take the broker's default, which is false, so root is refused. A command that runs as vcap can't use sudo or any other way to gain privileges, so privileged work needs root, and the command then leaves out sudo."
   commands.credential.key:
     description: "Optional secret. When set, a command request must carry it as a second credential. Leave it unset or empty to require none."
 
